@@ -1,10 +1,5 @@
 package com.sparta.zipsa.repository;
 
-import com.sparta.zipsa.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+public class UserRepository {
 
-import java.util.Optional;
-
-public interface UserRepository extends JpaRepository<User,Long> {
-    Optional<User> findByUsername(String userName);
 }

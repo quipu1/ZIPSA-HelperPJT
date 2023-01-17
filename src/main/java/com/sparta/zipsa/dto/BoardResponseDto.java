@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class BoardResponse {
+public class BoardResponseDto {
         private Long id;
         private String title;
         private String contents;
@@ -17,7 +17,7 @@ public class BoardResponse {
         private Long price;
         private String status;
 
-    public BoardResponse(Board board) {
+    public BoardResponseDto(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
         this.contents = board.getContents();
