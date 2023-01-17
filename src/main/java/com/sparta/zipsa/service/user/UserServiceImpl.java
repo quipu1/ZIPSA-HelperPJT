@@ -1,6 +1,7 @@
 package com.sparta.zipsa.service.user;
 
 import com.sparta.zipsa.dto.*;
+import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
 import com.sparta.zipsa.jwt.JwtUtil;
@@ -18,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class userServiceImpl implements userService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -50,7 +51,7 @@ public class userServiceImpl implements userService {
         userRepository.save(user);
         return new MessageResponseDto("회원 가입 완료",200);
 
-        }
+    }
 
     @Override
     public MessageResponseDto login(LoginRequestDto loginRequestDto, HttpServeletResponse response) {
