@@ -30,4 +30,11 @@ public class AdminController {
         return adminService.getUserAllByRole(page, size, isAsc, role);
     }
 
+    //helper 신청글 조회
+    @GetMapping("/helperboard")
+    @ResponseStatus(HttpStatus.OK)
+    public List<HelperBoard> getHelperBoard() {
+        return adminService.getHelperBoard();
+    }
+
 }
