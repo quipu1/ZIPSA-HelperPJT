@@ -23,7 +23,7 @@ public class userServiceImpl implements userService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    private static final String ADMIN_TOKEN = "으아아아아아아아악ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ";
+    private static final String ADMIN_TOKEN = "으아아아아아아아악ㅏㅏㅏㅏㅏㅏ";
     @Override
     public MessageResponseDto signup(@RequestBody @Valid SignupRequestDto signupRequestDto){
         String username = signupRequestDto.getUsername();
