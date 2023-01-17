@@ -26,7 +26,7 @@ public class AdminController {
             @RequestParam("size") int size,
             @RequestParam("isAsc") boolean isAsc,
             @RequestParam("role") String role
-            ) {
+    ) {
         return adminService.getUserAllByRole(page, size, isAsc, role);
     }
 
@@ -35,6 +35,19 @@ public class AdminController {
     @ResponseStatus(HttpStatus.OK)
     public List<HelperBoard> getHelperBoard() {
         return adminService.getHelperBoard();
+    }
+
+    //helper 권한 등록 요청 승인
+    @PutMapping("/authority/accept/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void acceptHelperAuthority(@PathVariable Long userId) {
+        adminService.acceptHelperAuthority(userId);
+    }
+
+    @PutMapping("/authorty/remove/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeHelperAuthority(@PathVariable Long userId) {
+        adminService.removeHelperAuthority(userId);
     }
 
 }
