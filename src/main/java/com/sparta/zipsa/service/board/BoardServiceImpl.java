@@ -50,7 +50,7 @@ public class BoardServiceImpl implements BoardService {
 
         String deletePrint = Long.toString(boardId);
         String print = "게시글이 삭제되었습니다.";
-        deletePrint = deletePrint + print;
+        deletePrint.concat(print);
         return deletePrint;
     }
 }
