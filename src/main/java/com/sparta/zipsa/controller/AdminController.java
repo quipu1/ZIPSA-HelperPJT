@@ -18,16 +18,16 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    //전체 사용자 조회
+    //요청된 Role에 따라 해당 Role의 사용자 전체 조회
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public Page<User> getUserAll(
+    public Page<User> getUserAllByRoll(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
-            @RequestParam("sortBy") String sortBy,
-            @RequestParam("isAsc") boolean isAsc
+            @RequestParam("isAsc") boolean isAsc,
+            @RequestParam("role") String role
             ) {
-        return adminService.getUserAll(page, size, sortBy, isAsc);
+        return adminService.getUserAllByRole(page, size, isAsc, role);
     }
 
 }
