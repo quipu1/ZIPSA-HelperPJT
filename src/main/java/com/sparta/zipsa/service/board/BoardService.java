@@ -7,6 +7,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface BoardService {
-    BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user);
+    BoardResponseDto createBoard( BoardRequestDto boardRequest,  User user);
+
+    BoardResponseDto revisionBoard(Long boardId, BoardRequestDto boardRequest, User user);
+
+    String deleteBoard(Long boardId, User user);
 
 }
