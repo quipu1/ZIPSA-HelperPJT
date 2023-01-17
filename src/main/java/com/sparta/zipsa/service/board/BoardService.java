@@ -14,5 +14,5 @@ public interface BoardService {
     BoardResponseDto revisionBoard(Long boardId, BoardRequestDto boardRequest, User user);
 
     String deleteBoard(Long boardId, User user);
-    List<BoardResponseDto> getPostAll();
+    List<BoardResponseDto> getBoardAll();
 }
