@@ -1,2 +1,8 @@
-package com.sparta.zipsa.entity;public class Customer {
+package com.sparta.zipsa.entity;
+
+public class Customer extends User {
+
+
+
+
 }

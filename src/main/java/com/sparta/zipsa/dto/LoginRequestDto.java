@@ -1,2 +1,13 @@
-package com.sparta.zipsa.dto;public class LoginRequestDto {
+package com.sparta.zipsa.dto;
+
+import lombok.Getter;
+
+@Getter
+public class LoginRequestDto {
+
+    private String username;
+
+    private String password;
+
+
 }

@@ -1,2 +1,9 @@
-package com.sparta.zipsa.entity;public class Helper {
+package com.sparta.zipsa.entity;
+
+public class Helper extends User{
+
+
+
+
+
 }

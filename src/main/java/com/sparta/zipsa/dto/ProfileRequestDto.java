@@ -1,2 +1,4 @@
-package com.sparta.zipsa.dto;public class ProfileRequestDto {
+package com.sparta.zipsa.dto;
+
+public class ProfileRequestDto {
 }
