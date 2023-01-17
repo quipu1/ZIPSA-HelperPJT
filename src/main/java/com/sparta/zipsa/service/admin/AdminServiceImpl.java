@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
+    private final HelperBoardRepository helperBoardRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,5 +36,12 @@ public class AdminServiceImpl implements AdminService {
         } else throw new IllegalArgumentException();
 
         return users;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HelperBoard> getHelperBoard() {
+        List<HelperBoard> helperBoardList = helperBoardRepository.findAll();
+        return helperBoardList;
     }
 }
