@@ -18,15 +18,21 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<User> getUserAll(int page, int size, String sortBy, boolean isAsc) {
+    public Page<User> getUserAllByRole(int page, int size, boolean isAsc, String role) {
         //페이징 처리
         //삼항연산자로 true ASC / false DESC 정렬 설정
-        //sortBy로 정렬 기준이 되는 property 설정
+        //sortBy로 정렬 기준이 되는 property 설정 - id
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, sortBy);
+        Sort sort = Sort.by(direction, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<User> users = userRepository.findAll(pageable);
+        if (role.equals("customer")) {
+            Page<User> users = userRepository.findByUserRoleEnum(pageable, UserRoleEnum.CUSTOMER);
+        } else if (role.equals("helper")) {
+            Page<User> users = userRepository.findByUserRoleEnum(pageable, UserRoleEnum.HELPER);
+        } else if (role.equals("admin")) {
+            Page<User> users = userRepository.findByUserRoleEnum(pageable, UserRoleEnum.ADMIN);
+        } else throw new IllegalArgumentException();
 
         return users;
     }
