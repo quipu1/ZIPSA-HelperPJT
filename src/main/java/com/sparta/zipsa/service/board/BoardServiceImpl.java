@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.sparta.zipsa.repository.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -53,4 +57,13 @@ public class BoardServiceImpl implements BoardService {
         deletePrint.concat(print);
         return deletePrint;
     }
+
+    @Override
+    @Transactional
+    public List<BoardResponseDto> getBoardAll() {
+        List<Board> board = boardRepository.findAll();
+        List<BoardResponseDto> resultBoards = new ArrayList<>();
+        return resultBoards;
+    }
+
 }
