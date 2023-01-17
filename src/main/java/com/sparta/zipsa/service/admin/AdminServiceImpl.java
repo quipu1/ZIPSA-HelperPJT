@@ -44,4 +44,30 @@ public class AdminServiceImpl implements AdminService {
         List<HelperBoard> helperBoardList = helperBoardRepository.findAll();
         return helperBoardList;
     }
+
+    @Override
+    @Transactional
+    public void acceptHelperAuthority(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("해당 유저는 존재하지 않습니다."));
+
+        if (user.getRole.equals(UserRoleEnum.CUSTOMER)) {
+            user.changeRole(UserRoleEnum.HELPER);
+        } else {
+            throw new IllegalArgumentException("이미 Helper 권한을 가진 유저입니다.");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removeHelperAuthority(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("해당 유저는 존재하지 않습니다."));
+
+        if (user.getRole.equals(UserRoleEnum.HELPER)) {
+            user.changeRole(UserRoleEnum.CUSTOMER);
+        } else {
+            throw new IllegalArgumentException("이미 CUSTOMER 권한을 가진 유저입니다.");
+        }
+    }
 }
