@@ -11,7 +11,7 @@ public class LoginResponseDto {
 
     private UserRoleEnum role;
 
-    public LoginResponseDto(String username, String password, UserRoleEnum role) {
+    public LoginResponseDto(String username) {
         this.username = username;
         this.password = password;
         this.role = role;

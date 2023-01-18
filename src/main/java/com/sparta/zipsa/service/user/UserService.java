@@ -18,7 +18,6 @@ public interface UserService {
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto);
 
-
     public ProfileResponseDto getProfile(Long user_id);
 
     public ResponseEntity delete(DeleteRequestDto deleteRequestDto, User user);

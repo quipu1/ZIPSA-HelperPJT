@@ -7,23 +7,17 @@ import com.sparta.zipsa.entity.UserRoleEnum;
 import com.sparta.zipsa.jwt.JwtUtil;
 import com.sparta.zipsa.repository.UserRepository;
 import com.sparta.zipsa.security.UserDetailsImpl;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,13 +25,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-
-    private static final String ADMIN_TOKEN = "으아아아아아아아악ㅏㅏㅏㅏㅏㅏ";
+    private final PasswordEncoder passwordEncoder;
+    private static final String ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
     @Override
     @Transactional
     public ResponseEntity signup(SignupRequestDto signupRequestDto){
         String username = signupRequestDto.getUsername();
-        String password = signupRequestDto.getPassword(); /
+        String password = signupRequestDto.getPassword();
         String address = signupRequestDto.getAddress();
         String user_img = signupRequestDto.getUser_img();
 

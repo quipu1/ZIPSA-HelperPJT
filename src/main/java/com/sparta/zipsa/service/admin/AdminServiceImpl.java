@@ -1,7 +1,11 @@
 package com.sparta.zipsa.service.admin;
 
+import com.sparta.zipsa.jwt.JwtUtil;
+import com.sparta.zipsa.dto.TokenRequestDto;
 import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.entity.UserRoleEnum;
 import com.sparta.zipsa.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +20,8 @@ public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
     private final HelperBoardRepository helperBoardRepository;
+
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional(readOnly = true)
@@ -69,5 +75,25 @@ public class AdminServiceImpl implements AdminService {
         } else {
             throw new IllegalArgumentException("이미 CUSTOMER 권한을 가진 유저입니다.");
         }
+    }
+
+    @Transactional
+    public void reIssue(TokenRequestDto tokenRequestDto, HttpServletResponse response) {
+        if(!jwtUtil.validateTokenExceptExpiration(tokenRequestDto.getRefreshToken())){
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+        }
+
+        User user = findUserByToken(tokenRequestDto);
+
+        if(!user.getRefreshToken().equals(tokenRequestDto.getRefreshToken())){
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+        }
+
+        String refreshToken = jwtUtil.createRefreshToken();
+
+        user.updateRefreshToken(refreshToken);
+        userRepository.saveAndFlush(user);
+
+        addTokenToHeader(response, user);
     }
 }
