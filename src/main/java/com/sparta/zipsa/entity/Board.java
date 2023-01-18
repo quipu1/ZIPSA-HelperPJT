@@ -51,4 +51,6 @@ public class Board {
         this.status = status;
     }
 
+    public void changePost(User user, String title, String contents) {
+    }
 }

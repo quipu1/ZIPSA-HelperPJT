@@ -5,9 +5,12 @@ import com.sparta.zipsa.dto.BoardResponseDto;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,10 +19,27 @@ import org.springframework.web.bind.annotation.*;
 
 public class  BoardController {
     private final BoardService boardService;
-    @PostMapping
+    @PostMapping("/create/{boardId}")
     public BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user)
     {
         return boardService.createBoard(boardRequest,user);
+    }
+    @PatchMapping("/revision/{boardId}")
+    public BoardResponseDto revisionBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user)
+    {
+        return boardService.revisionBoard(boardId,boardRequest,user);
+    }
+
+    @DeleteMapping("/delete/{boardId}")
+    public String deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal User user)
+    {
+        return boardService.deleteBoard(boardId,user);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<BoardResponseDto> getPostAll() {
+        return boardService.getBoardAll();
     }
 
 }
