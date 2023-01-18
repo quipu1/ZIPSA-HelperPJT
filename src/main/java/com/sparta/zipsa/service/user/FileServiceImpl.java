@@ -29,7 +29,7 @@ public class FileServiceImpl implements FileService{
         try{
             multipartFile.transferTo(new File(location + filename));
         } catch(IOException e) {
-            System.out.println("오류오류오류오류");
+            System.out.println("입출력 관련 오류입니다.");
         }
 
     }
