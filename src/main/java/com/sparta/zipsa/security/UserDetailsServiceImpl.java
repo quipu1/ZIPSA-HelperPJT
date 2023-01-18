@@ -1,4 +1,4 @@
-package com.sparta.zipsa.service.user;
+package com.sparta.zipsa.security;
 
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.repository.UserRepository;
