@@ -4,26 +4,16 @@ import com.sparta.zipsa.dto.*;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
-import com.sparta.zipsa.jwt.JwtUtil;
 import com.sparta.zipsa.repository.UserRepository;
 import com.sparta.zipsa.security.UserDetailsImpl;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
