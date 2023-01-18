@@ -5,4 +5,5 @@ import lombok.Getter;
 @Getter
 public class MatchBoardRequestDto {
     private String content;
+
 }

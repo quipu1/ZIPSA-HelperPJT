@@ -25,6 +25,7 @@ public class MatchBoardResponseDto {
 
     private int status;
 
+    // 추후 수정 예정
     private String profile_img;
 
 
@@ -37,6 +38,7 @@ public class MatchBoardResponseDto {
         this.modifiedAt = matchBoard.getModifiedAt();
         this.status = matchBoard.getstatusList();
         this.board_id = board.getId();
+        this.profile_img = getProfile_img();
     }
 
 

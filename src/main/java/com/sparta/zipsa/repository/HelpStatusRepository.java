@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+// 수락 및 거절 기능 Repository
 public interface HelpStatusRepository extends JpaRepository<Status, Long> {
     List<Status> findByUserAndMatchBoard(Board board, MatchBoard matchBoard);
 }

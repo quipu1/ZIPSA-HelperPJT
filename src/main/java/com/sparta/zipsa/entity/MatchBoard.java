@@ -36,6 +36,8 @@ public class MatchBoard extends TimeStamp{
     @JoinColumn(name = "board_Id")
     private Board board;
 
+    // @ColumnDefault 어노테이션 사용으로 기본 값 0부터 시작
+    // ServiceImpl에서 수락을 할 시 해당 카운트가 올라가도록 해놨는데 잘 될지 모르겠어요
     @ColumnDefault("0")
     public void addhelpCount() {
         help_cnt += 1;
@@ -55,6 +57,7 @@ public class MatchBoard extends TimeStamp{
 //        this.status_list -= 1;
 //    }
 
+    // Response에서 출력을 할때 값이 아닌 사이즈로 출력이 되게 만들었습니다.
     public int getstatusList() {
         return this.statuses.size();
     }

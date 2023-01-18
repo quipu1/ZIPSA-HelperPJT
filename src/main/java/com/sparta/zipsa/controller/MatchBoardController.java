@@ -40,7 +40,7 @@ public class MatchBoardController {
         return matchBoardService.deleteMatchBoard(board_id,matchBoard_id,userDetails);
     }
 
-    // Match 신청글 수락
+    // 심부름 신청글 수락
     @PostMapping("/api/board/{board_id}/matchboard/{matchboard_id}")
     public ResponseEntity addStatus(@PathVariable Long board_id, @PathVariable Long matchboard_id){
         boolean statusCheck = matchBoardService.addStatus(board_id,matchboard_id);
@@ -51,7 +51,7 @@ public class MatchBoardController {
         }
     }
 
-    // Match 신청글 삭제
+    // 심부름 신청글 거절
     @DeleteMapping("/api/board/{board_id}/matchboard/{matchboard_id}")
     public ResponseEntity deleteStatus(@PathVariable Long board_id, @PathVariable Long matchboard_id) {
         boolean unStatusCheck = matchBoardService.deleteStatus(board_id,matchboard_id);

@@ -20,7 +20,9 @@ public interface MatchBoardService {
     ResponseEntity deleteMatchBoard(Long boardId, Long matchBoardId,UserDetails userDetails);
 
 
+    // 심부름 수락 기능
    boolean addStatus(Long boardId, Long matchboardId);
 
-    boolean deleteStatus(Long boardId, Long matchboardId);
+   // 심부름 거절 기능
+   boolean deleteStatus(Long boardId, Long matchboardId);
 }

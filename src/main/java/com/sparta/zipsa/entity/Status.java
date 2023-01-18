@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Status {
+
+    // 심부름 수락 및 거절 기능을 만들기 위한 엔티티
+    // 좋아요 기능을 따라 구현해서 나중에 수정을 무조건 해야할 것 같아요
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Status_ID")

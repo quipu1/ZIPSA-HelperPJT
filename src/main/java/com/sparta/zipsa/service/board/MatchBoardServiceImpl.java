@@ -91,7 +91,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
 
-    // 상태 및 도움 횟수 추가(수락) 기능
+    // 심부름 상태 및 도움 횟수 추가(수락) 기능
     // 도움 횟수는 수락 시 올라가지만 거절 할 때에는 내려가지 않는다.
     @Override
     public boolean addStatus(Long boardId, Long matchboardId) {
@@ -111,6 +111,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         return false;
     }
 
+    // 심부름 거절 기능 추가
     @Override
     public boolean deleteStatus(Long boardId, Long matchboardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
