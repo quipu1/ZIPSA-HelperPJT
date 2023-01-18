@@ -3,10 +3,11 @@ package com.sparta.zipsa.dto;
 import com.sparta.zipsa.entity.UserRoleEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import javax.validation.constrains.Pattern;
+
 
 @Getter
 @RequiredArgsConstructor
