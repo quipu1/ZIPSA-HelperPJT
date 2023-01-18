@@ -4,27 +4,33 @@ import com.sparta.zipsa.dto.*;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
+import com.sparta.zipsa.exception.AdminException;
+import com.sparta.zipsa.exception.UserException;
+import com.sparta.zipsa.jwt.JwtUtil;
 import com.sparta.zipsa.repository.UserRepository;
 import com.sparta.zipsa.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
-
     private final FileService fileServiceImpl;
 
-    private static final String ADMIN_TOKEN = "으아아아아아아아악ㅏㅏㅏㅏㅏㅏ";
+    private final PasswordEncoder passwordEncoder;
+    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Override
     @Transactional
@@ -38,12 +44,12 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> foundUser = userRepository.findByUsername(username); //.isPresent같은 메소드 사용가능해서 optional
         if (foundUser.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다");
+            throw new UserException.UsernameDuplicateException();
         }
         UserRoleEnum role = UserRoleEnum.CUSTOMER;
         if (signupRequestDto.isAdmin()) {
             if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new SecurityException("관리자 암호가 틀려 등록이 불가능합니다.");
+                throw new AdminException.AdminPasswordNotMatchException();
             }
             role = UserRoleEnum.ADMIN;
         }
@@ -51,8 +57,7 @@ public class UserServiceImpl implements UserService {
         String userImage = fileName;
         User user = new User(username, password, address, userImage, role);
         userRepository.save(user);
-//        return new MessageResponseDto("회원 가입 완료",200);
-        return new ResponseEntity<>("회원 가입 완료", HttpStatus.OK);
+        return new ResponseEntity("회원 가입 완료", HttpStatus.OK);
 
     }
 
@@ -62,13 +67,11 @@ public class UserServiceImpl implements UserService {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("회원을 찾을 수 없습니다")
-        );
+        User user = userRepository.findByUsername(username).orElseThrow(UserException.UserNotFoundException::new);
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new UserException.PasswordNotMatchException();
         }
-        return new LoginResponseDto(jwtUtil.createToken(user.getUsername(), user.getRole()));
+        return new LoginResponseDto(user.getUsername(), user.getPassword(), user.getRole());
     }
 
     @Override
@@ -80,9 +83,8 @@ public class UserServiceImpl implements UserService {
                 && passwordEncoder.matches(deleteRequestDto.getPassword(), user.getPassword())) {
             userRepository.deleteByUsername(deleteRequestDto.getUsername());
             return new ResponseEntity("회원 탈퇴 처리 되었습니다", HttpStatus.OK);
-//            return new MessageResponseDto("삭제 성공", 200);
         }
-        throw new SecurityException("가입한 회원만이 탈퇴할 수 있습니다");
+        throw new UserException.UserNotFoundException();
     }
 
     @Override
