@@ -1,12 +1,12 @@
 package com.sparta.zipsa.entity;
 
 import com.sparta.zipsa.dto.BoardRequestDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -33,8 +33,13 @@ public class Board {
 
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
-    private String contents;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
+
+    @OneToMany(fetch =FetchType.LAZY,mappedBy = "memo",cascade = CascadeType.ALL)
+    private List<String> contents = new ArrayList<>();;
     @Column(nullable = false)
     private Long price;
 
@@ -44,6 +49,7 @@ public class Board {
         this.title = boardRequest.getTitle();
         this.contents = boardRequest.getContents();
         this.price = boardRequest.getPrice();
+        this.user = user;
     }
 
     public void changeStatus(String status)
@@ -51,6 +57,11 @@ public class Board {
         this.status = status;
     }
 
-    public void changePost(User user, String title, String contents) {
+    public void changeBoard(User user, String title, List<String> contents) {
+    }
+
+    public void boardAddMatchedBoard(List<Board> board)
+    {
+
     }
 }

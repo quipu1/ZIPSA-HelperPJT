@@ -5,6 +5,8 @@ import com.sparta.zipsa.dto.BoardResponseDto;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +38,7 @@ public class BoardServiceImpl implements BoardService {
         Board board =boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
-        board.changePost(user, boardRequest.getTitle(), boardRequest.getContents());
+        board.changeBoard(user, boardRequest.getTitle(), boardRequest.getContents());
         boardRepository.save(board);
         BoardResponseDto boardResponse = new BoardResponseDto(board);
         return boardResponse;
@@ -44,25 +46,48 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public String deleteBoard(Long boardId, User user)
+    public ResponseEntity deleteBoard(Long boardId, User user)
     {
         Board board =boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
 
-        boardRepository.delete(board);
+        boardRepository.deleteById(boardId);
 
         String deletePrint = Long.toString(boardId);
         String print = "게시글이 삭제되었습니다.";
         deletePrint.concat(print);
-        return deletePrint;
+
+
+        return new ResponseEntity<>(deletePrint, HttpStatus.OK);;
     }
 
     @Override
     @Transactional
     public List<BoardResponseDto> getBoardAll() {
-        List<Board> board = boardRepository.findAll();
+        List<Board> boards = boardRepository.findAll();
         List<BoardResponseDto> resultBoards = new ArrayList<>();
+
+        for(Board board : boards)
+        {
+            BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+            resultBoards.add(boardResponseDto);
+        }
+
+        return resultBoards;
+    }
+
+    @Override
+    @Transactional
+    public List<BoardResponseDto> getUserBoardAll(String userName) {
+        List<Board> boards = boardRepository.findBoardsByUsername(userName);
+        List<BoardResponseDto> resultBoards = new ArrayList<>();
+
+        for(Board board : boards)
+        {
+            BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+            resultBoards.add(boardResponseDto);
+        }
         return resultBoards;
     }
 
