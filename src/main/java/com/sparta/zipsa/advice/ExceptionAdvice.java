@@ -72,6 +72,12 @@ public class ExceptionAdvice {
 
         if (e instanceof AlreadyApplyHelperException)
             return StatusResponse.toResponseEntity(StatusCode.ALREADY_APPLY_HELPER);
+        else if (e instanceof AlreadyHelperException) {
+            return StatusResponse.toResponseEntity(StatusCode.ALREADY_HELPER);
+        }
+        else if (e instanceof AlreadyCustomerException) {
+            return StatusResponse.toResponseEntity(StatusCode.ALREADY_CUSTOMER);
+        }
 
         return StatusResponse.toResponseEntity(StatusCode.HELPER);
     }
@@ -82,6 +88,9 @@ public class ExceptionAdvice {
 
         if (e instanceof AdminPasswordNotMatchException)
             return StatusResponse.toResponseEntity(StatusCode.ADMIN_PASSWORD_NOT_MATCH);
+        else if (e instanceof InvalidAuthorityException) {
+            return StatusResponse.toResponseEntity(StatusCode.INVALID_AUTHORITY);
+        }
 
         return StatusResponse.toResponseEntity(StatusCode.ADMIN);
     }
