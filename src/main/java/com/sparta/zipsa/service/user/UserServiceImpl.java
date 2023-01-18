@@ -4,16 +4,19 @@ import com.sparta.zipsa.dto.*;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
+import com.sparta.zipsa.jwt.JwtUtil;
 import com.sparta.zipsa.repository.UserRepository;
-import com.sparta.zipsa.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final FileService fileServiceImpl;
 
-    private static final String ADMIN_TOKEN = "으아아아아아아아악ㅏㅏㅏㅏㅏㅏ";
+    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Override
     @Transactional
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        return new LoginResponseDto(jwtUtil.createToken(user.getUsername(), user.getRole()));
+        return new LoginResponseDto(user.getUsername(), user.getPassword(), user.getRole());
     }
 
     @Override
