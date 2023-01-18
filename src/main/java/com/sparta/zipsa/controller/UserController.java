@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/user")
@@ -22,17 +23,21 @@ public class UserController {
     private final JwtUtil jwtUtil;
 
 
+
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
-        return userServiceImpl.signup(signupRequestDto);
+    public ResponseEntity signup(@RequestPart("file") MultipartFile multipartFile, //사진
+                                 //dto객체와 file객체 동시에 받으려면 @RequestPart 필요
+                                 @RequestPart("signupRequestDto") @Valid SignupRequestDto signupRequestDto) {
+        return userServiceImpl.signup(signupRequestDto, multipartFile);
     }
+
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServeletResponse response) {
         LoginResponseDto loginDto = userServiceImpl.login(loginRequestDto);
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(loginDto.getUsername(),loginDto.getRole()));
-        return new ResponseEntity("로그인 되었습니다.",HttpStatus.OK);
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(loginDto.getUsername(), loginDto.getRole()));
+        return new ResponseEntity("로그인 되었습니다.", HttpStatus.OK);
     }
 
     @GetMapping("/{user_id}")

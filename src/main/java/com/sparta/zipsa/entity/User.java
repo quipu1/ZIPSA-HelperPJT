@@ -10,7 +10,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-//username, password, address, user_img, helper,role,help_cnt
 @Entity(name = "users")
 public class User {
 
@@ -28,11 +27,11 @@ public class User {
     @Column(nullable = false)
     private String address;
 
-    @Column(columnDefinition = "TEXT")
-    private String user_img;
+    @Column/*(columnDefinition = "TEXT")*/
+    private String userImage;
 
     @Column
-    int help_cnt;
+    int helpCount;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -51,11 +50,11 @@ public class User {
 
 
 
-    public User(String username, String password, String address, String user_img,UserRoleEnum role){
+    public User(String username, String password, String address, String userImage,UserRoleEnum role){
         this.username = username;
         this.password = password;
         this.address = address;
-        this.user_img = user_img;
+        this.userImage = userImage;
         this.role = role;
     }
 }

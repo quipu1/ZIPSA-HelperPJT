@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 
 
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class SignupRequestDto {
 
@@ -26,6 +25,5 @@ public class SignupRequestDto {
 
     private String address;
 
-    private String user_img;
 }
 

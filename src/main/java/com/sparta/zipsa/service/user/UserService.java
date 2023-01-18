@@ -11,10 +11,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
-    public ResponseEntity signup(SignupRequestDto signupRequestDto);
+    public ResponseEntity signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile);
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto);
 
