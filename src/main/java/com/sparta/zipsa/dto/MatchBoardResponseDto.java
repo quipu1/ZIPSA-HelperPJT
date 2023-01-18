@@ -1,5 +1,6 @@
 package com.sparta.zipsa.dto;
 
+import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.MatchBoard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,31 +23,21 @@ public class MatchBoardResponseDto {
 
     private Long board_id;
 
-    private String status;
+    private int status;
 
     private String profile_img;
 
 
-    public MatchBoardResponseDto(MatchBoard matchBoard) {
+    public MatchBoardResponseDto(MatchBoard matchBoard, Board board) {
         this.id = matchBoard.getId();
-        this.help_cnt = matchBoard.getHelp_cnt();
+        matchBoard.addhelpCount();
         this.content = matchBoard.getContent();
         this.username = matchBoard.getUsername();
-        this.createdAt = matchBoard.getCreateAt();
+        this.createdAt = matchBoard.getCreatedAt();
         this.modifiedAt = matchBoard.getModifiedAt();
-        this.status = matchBoard.getStatus();
+        this.status = matchBoard.getstatusList();
+        this.board_id = board.getId();
     }
 
-    //    public MatchBoardResponseDto(MatchBoard matchBoard,Board board) {
-    //        this.id = matchBoard.getId();
-    //        this.help_cnt = matchBoard.getHelp_cnt();
-    //        this.content = matchBoard.getContent();
-    //        this.username = matchBoard.getUsername();
-    //        this.createdAt = matchBoard.getCreateAt();
-    //        this.modifiedAt = matchBoard.getModifiedAt();
-    //        this.status = matchBoard.getStatus();
-    //        this.profile_img = getProfile_img();
-    //    }
 
-    // 여기에 BoardId도 해야하는데.. 어떻게 해야하지..
 }
