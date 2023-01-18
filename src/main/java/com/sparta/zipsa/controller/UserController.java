@@ -1,6 +1,7 @@
 package com.sparta.zipsa.controller;
+import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.jwt.JwtUtil;
-import com.sparta.zipsa.service.user.UserDetailsImpl;
+import com.sparta.zipsa.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import com.sparta.zipsa.dto.*;
 import com.sparta.zipsa.entity.Board;
@@ -53,7 +54,7 @@ public class UserController {
             @PathVariable Long user_id,
             @RequestBody ProfileRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
+            ) {
 
         return userService.updateProfile(user_id, requestDto, userDetails);
 

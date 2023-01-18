@@ -3,6 +3,7 @@ package com.sparta.zipsa.service.user;
 import com.sparta.zipsa.dto.*;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
