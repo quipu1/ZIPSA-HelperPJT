@@ -1,6 +1,10 @@
 package com.sparta.zipsa.service.admin;
 
 import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.entity.UserRoleEnum;
+import com.sparta.zipsa.exception.AdminException;
+import com.sparta.zipsa.exception.HelperException;
+import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,13 +31,17 @@ public class AdminServiceImpl implements AdminService {
         Sort sort = Sort.by(direction, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
 
+        Page<User> users;
+
         if (role.equals("customer")) {
-            Page<User> users = userRepository.findByUserRoleEnum(pageable, UserRoleEnum.CUSTOMER);
+            users = userRepository.findByUserRoleEnum(UserRoleEnum.CUSTOMER, pageable);
         } else if (role.equals("helper")) {
-            Page<User> users = userRepository.findByUserRoleEnum(pageable, UserRoleEnum.HELPER);
+            users = userRepository.findByUserRoleEnum(UserRoleEnum.HELPER, pageable);
         } else if (role.equals("admin")) {
-            Page<User> users = userRepository.findByUserRoleEnum(pageable, UserRoleEnum.ADMIN);
-        } else throw new IllegalArgumentException();
+            users = userRepository.findByUserRoleEnum(UserRoleEnum.ADMIN, pageable);
+        } else {
+            throw new AdminException.InvalidAuthorityException();
+        }
 
         return users;
     }
@@ -48,26 +56,24 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void acceptHelperAuthority(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저는 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(UserException.UserNotFoundException::new);
 
-        if (user.getRole.equals(UserRoleEnum.CUSTOMER)) {
+        if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
             user.changeRole(UserRoleEnum.HELPER);
         } else {
-            throw new IllegalArgumentException("이미 Helper 권한을 가진 유저입니다.");
+            throw new HelperException.AlreadyHelperException();
         }
     }
 
     @Override
     @Transactional
     public void removeHelperAuthority(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저는 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(UserException.UserNotFoundException::new);
 
-        if (user.getRole.equals(UserRoleEnum.HELPER)) {
+        if (user.getRole().equals(UserRoleEnum.HELPER)) {
             user.changeRole(UserRoleEnum.CUSTOMER);
         } else {
-            throw new IllegalArgumentException("이미 CUSTOMER 권한을 가진 유저입니다.");
+            throw new HelperException.AlreadyCustomerException();
         }
     }
 }
