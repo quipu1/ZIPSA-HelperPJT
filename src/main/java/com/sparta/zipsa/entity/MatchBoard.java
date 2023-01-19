@@ -29,12 +29,18 @@ public class MatchBoard extends TimeStamp{
     public int help_cnt;
 
     @Column(nullable = false)
-    public String status;
+    public String status = "모집중";
 
     // 한개의 게시글에 여러개의 신청을 할 수 있다..?
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "board_Id")
     private Board board;
+
+    public MatchBoard(User user, MatchBoardRequestDto requestDto, Board board) {
+        this.username = user.getUsername();
+        this.content = requestDto.getContent();
+        this.board = board;
+    }
 
     // @ColumnDefault 어노테이션 사용으로 기본 값 0부터 시작
     // ServiceImpl에서 수락을 할 시 해당 카운트가 올라가도록 해놨는데 잘 될지 모르겠어요
@@ -43,25 +49,13 @@ public class MatchBoard extends TimeStamp{
         help_cnt += 1;
     }
 
-//    @ColumnDefault("1")
-//    @Column(nullable = false)
-//    long status_list;
-    @OneToMany(mappedBy = "Status" , cascade = CascadeType.ALL)
-    private List<Status> statuses = new ArrayList<>();
-
-//    public void addStatus() {
-//        this.status_list += 1;
-//    }
-//
-//    public void deleteStatus() {
-//        this.status_list -= 1;
-//    }
-
-    // Response에서 출력을 할때 값이 아닌 사이즈로 출력이 되게 만들었습니다.
-    public int getstatusList() {
-        return this.statuses.size();
+    public void upStatus() {
+        this.status = "수락된 게시물";
     }
 
+    public void downStatus() {
+        this.status = "거절된 게시물";
+    }
 
     public void update(MatchBoardRequestDto requestDto) {
         this.content = requestDto.getContent();
