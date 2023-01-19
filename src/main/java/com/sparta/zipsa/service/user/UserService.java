@@ -20,16 +20,12 @@ public interface UserService {
 
     LoginResponseDto login(LoginRequestDto loginRequestDto);
 
-
     ProfileResponseDto getProfile(Long userId);
 
     ResponseEntity delete(DeleteRequestDto deleteRequestDto, User user);
 
-
     ResponseEntity updateProfile(Long userId, ProfileRequestDto profileRequestDto, User user);
 
-
-    Page<Board> getPageBoardByUser(Long userId, int page, int size, boolean isAsc, User user);
 }
 
 
