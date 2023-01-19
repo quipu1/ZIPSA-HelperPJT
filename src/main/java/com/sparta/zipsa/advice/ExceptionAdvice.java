@@ -61,6 +61,8 @@ public class ExceptionAdvice {
             return StatusResponse.toResponseEntity(StatusCode.MATCH_NOT_FOUND);
         else if (e instanceof AlreadyApplyMatchException) {
             return StatusResponse.toResponseEntity(StatusCode.ALREADY_APPLY_MATCH);
+        } else if (e instanceof AlreadyRejectMatchException) {
+            return StatusResponse.toResponseEntity(StatusCode.ALREADY_REJECTED_MATCH);
         }
 
         return StatusResponse.toResponseEntity(StatusCode.MATCH);
