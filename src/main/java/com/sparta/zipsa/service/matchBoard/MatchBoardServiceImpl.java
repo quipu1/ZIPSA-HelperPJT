@@ -1,4 +1,4 @@
-package com.sparta.zipsa.service.board;
+package com.sparta.zipsa.service.matchBoard;
 
 import com.sparta.zipsa.dto.MatchBoardRequestDto;
 import com.sparta.zipsa.dto.MatchBoardResponseDto;
@@ -164,7 +164,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
             // status가 거절 완료인 상태면 익셉션 출력
         } else if (matchBoard.status.equals("거절 완료")) {
-           throw new MatchException();
+           throw new MatchException.AlreadyRejectMatchException();
 
            // status가 수락된 게시물 상태이면 익셉션 출력
         } else if (matchBoard.status.equals("수락된 게시물")) {

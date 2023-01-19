@@ -1,4 +1,4 @@
-package com.sparta.zipsa.service.board;
+package com.sparta.zipsa.service.matchBoard;
 
 import com.sparta.zipsa.dto.MatchBoardRequestDto;
 import com.sparta.zipsa.dto.MatchBoardResponseDto;
