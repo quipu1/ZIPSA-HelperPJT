@@ -6,6 +6,7 @@ import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -17,29 +18,34 @@ import java.util.List;
 @RequestMapping("/api/board")
 @PreAuthorize("hasRole('ROLE_HELPER') or hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
 
-public class  BoardController {
+public class BoardController {
     private final BoardService boardService;
+
     @PostMapping("/create/{boardId}")
-    public BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user)
-    {
-        return boardService.createBoard(boardRequest,user);
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user) {
+        return boardService.createBoard(boardRequest, user);
     }
+
     @PatchMapping("/revision/{boardId}")
-    public BoardResponseDto revisionBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user)
-    {
-        return boardService.revisionBoard(boardId,boardRequest,user);
+    public BoardResponseDto revisionBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user) {
+        return boardService.revisionBoard(boardId, boardRequest, user);
     }
 
     @DeleteMapping("/delete/{boardId}")
-    public String deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal User user)
-    {
-        return boardService.deleteBoard(boardId,user);
+    public ResponseEntity deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal User user) {
+        return boardService.deleteBoard(boardId, user);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BoardResponseDto> getPostAll() {
+    public List<BoardResponseDto> getBoardAll() {
         return boardService.getBoardAll();
+    }
+
+    @GetMapping("/lookup/{userName}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BoardResponseDto> getUserBoardAll(@PathVariable String userName) {
+        return boardService.getUserBoardAll(userName);
     }
 
 }

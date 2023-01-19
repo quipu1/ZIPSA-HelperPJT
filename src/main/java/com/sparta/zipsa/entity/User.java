@@ -1,6 +1,7 @@
 package com.sparta.zipsa.entity;
 
 
+import com.sparta.zipsa.dto.ProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,11 +28,16 @@ public class User {
     @Column(nullable = false)
     private String address;
 
-    @Column/*(columnDefinition = "TEXT")*/
+    @Column(nullable = false)
     private String userImage;
 
     @Column
-    int helpCount;
+    private int helpCount;
+
+    @Column
+    private int status;
+
+    private int helper;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -41,14 +47,6 @@ public class User {
     @OneToMany(mappedBy = "username" , cascade = CascadeType.REMOVE)
     private List<Board> boards = new ArrayList<>();
 
-//혹시 쓰실거면 쓰세요 일단 주석처리! 연관관계메소드
-//    public void addPost(Board board){
-//        board.setUsers(this);
-//        this.boards.add(board);
-//    }
-
-
-
 
     public User(String username, String password, String address, String userImage,UserRoleEnum role){
         this.username = username;
@@ -56,5 +54,14 @@ public class User {
         this.address = address;
         this.userImage = userImage;
         this.role = role;
+    }
+
+    public void changeRole(UserRoleEnum role) {
+        this.role = role;
+    }
+
+    public void update(ProfileRequestDto profileRequestDto){
+        this.address = profileRequestDto.getAddress();
+        this.userImage = profileRequestDto.getUserImage();
     }
 }
