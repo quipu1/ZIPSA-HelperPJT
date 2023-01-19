@@ -4,17 +4,22 @@ import com.sparta.zipsa.dto.BoardRequestDto;
 import com.sparta.zipsa.dto.BoardResponseDto;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.entity.UserRoleEnum;
+import com.sparta.zipsa.exception.BoardException;
+import com.sparta.zipsa.exception.UserException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import com.sparta.zipsa.repository.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -22,36 +27,82 @@ public class BoardServiceImpl implements BoardService {
 
     private static UserRepository userRepository;
     private static BoardRepository boardRepository;
+
+
+    //게시글 생성
     @Override
     @Transactional
-    public BoardResponseDto createBoard(BoardRequestDto boardRequest, User user)
-    {
+    public BoardResponseDto createBoard(BoardRequestDto boardRequest, User user) {
         Board board = new Board(boardRequest,user);
         boardRepository.save(board);
         BoardResponseDto boardResponse = new BoardResponseDto(board);
         return boardResponse;
     }
+
+
+    //모든 게시글 조회 - 페이징
     @Override
     @Transactional
-    public BoardResponseDto revisionBoard(Long boardId, BoardRequestDto boardRequest, User user)
-    {
-        Board board =boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-        );
-        board.changeBoard(user, boardRequest.getTitle(), boardRequest.getContents());
+    public Page<BoardResponseDto> getBoardAll(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Board> boards = boardRepository.findAll(pageable);
+        Page<BoardResponseDto> boardListDto = boards.map(BoardResponseDto::toBoardResponseDto);
+
+        return boardListDto;
+    }
+
+
+    //작성자의 내가 쓴 글 모두 조회 - 페이징
+    @Override
+    @Transactional
+    public Page<BoardResponseDto> getMyBoardAll(int page, int size, Long userId, User user) {
+
+        if (userId != user.getId()) {
+            throw new UserException.AuthorityException();
+        }
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Board> myBoardList = boardRepository.findAllByUsername(pageable, user.getUsername());
+        Page<BoardResponseDto> myBoardListDto = myBoardList.map(BoardResponseDto::toBoardResponseDto);
+
+        return  myBoardListDto;
+    }
+
+
+    //선택한 게시글 조회
+    @Override
+    @Transactional
+    public BoardResponseDto getBoard(Long boardId, String username) {
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardException.BoardNotFoundException::new);
+        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+
+        return boardResponseDto;
+    }
+
+
+    //선택한 게시글 수정
+    @Override
+    @Transactional
+    public BoardResponseDto revisionBoard(Long boardId, BoardRequestDto boardRequest, User user) {
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardException.BoardNotFoundException::new);
+        checkUser(user, board);
+        board.editBoard(boardRequest.getTitle(), boardRequest.getContent());
         boardRepository.save(board);
         BoardResponseDto boardResponse = new BoardResponseDto(board);
         return boardResponse;
     }
 
+
     @Override
     @Transactional
     public ResponseEntity deleteBoard(Long boardId, User user)
     {
-        Board board =boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-        );
-
+        Board board =boardRepository.findById(boardId).orElseThrow(BoardException.BoardNotFoundException::new);
+        checkUser(user, board);
         boardRepository.deleteById(boardId);
 
         String deletePrint = Long.toString(boardId);
@@ -59,36 +110,16 @@ public class BoardServiceImpl implements BoardService {
         deletePrint.concat(print);
 
 
-        return new ResponseEntity<>(deletePrint, HttpStatus.OK);;
+        return new ResponseEntity<>(deletePrint, HttpStatus.OK);
     }
 
-    @Override
-    @Transactional
-    public List<BoardResponseDto> getBoardAll() {
-        List<Board> boards = boardRepository.findAll();
-        List<BoardResponseDto> resultBoards = new ArrayList<>();
 
-        for(Board board : boards)
-        {
-            BoardResponseDto boardResponseDto = new BoardResponseDto(board);
-            resultBoards.add(boardResponseDto);
+    //작성자와 현재 유저가 같은 지, ADMIN인지 확인
+    private void checkUser(User user, Board board) {
+        if (user.getRole() != UserRoleEnum.ADMIN  && !user.getUsername().equals(board.getUsername())) {
+            throw new UserException.AuthorityException();
         }
-
-        return resultBoards;
     }
 
-    @Override
-    @Transactional
-    public List<BoardResponseDto> getUserBoardAll(String userName) {
-        List<Board> boards = boardRepository.findBoardsByUsername(userName);
-        List<BoardResponseDto> resultBoards = new ArrayList<>();
-
-        for(Board board : boards)
-        {
-            BoardResponseDto boardResponseDto = new BoardResponseDto(board);
-            resultBoards.add(boardResponseDto);
-        }
-        return resultBoards;
-    }
 
 }
