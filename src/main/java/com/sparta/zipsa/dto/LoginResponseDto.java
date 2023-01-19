@@ -2,8 +2,10 @@ package com.sparta.zipsa.dto;
 
 import com.sparta.zipsa.entity.UserRoleEnum;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class LoginResponseDto {
     private String username;
 
