@@ -1,14 +1,15 @@
 package com.sparta.zipsa.controller;
 
+import com.sparta.zipsa.entity.HelperBoard;
 import com.sparta.zipsa.entity.User;
-import com.sparta.zipsa.security.UserDetailsImpl;
 import com.sparta.zipsa.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
