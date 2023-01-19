@@ -4,12 +4,14 @@ import com.sparta.zipsa.entity.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 public class BoardResponseDto {
         private Long id;
         private String title;
-        private String contents;
+        private List<String> contents;
         private String username;
         private String address;
         private String createdAt;
