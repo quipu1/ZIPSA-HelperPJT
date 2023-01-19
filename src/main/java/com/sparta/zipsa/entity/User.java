@@ -31,8 +31,8 @@ public class User {
     @Column(nullable = false)
     private String userImage;
 
-    @Column
-    private int helpCount;
+    @Column(nullable = true)
+    private int helpCnt = 0;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -53,6 +53,10 @@ public class User {
 
     public void changeRole(UserRoleEnum role) {
         this.role = role;
+    }
+
+    public void addHelpCnt() {
+        this.helpCnt += 1;
     }
 
     public void update(ProfileRequestDto profileRequestDto) {

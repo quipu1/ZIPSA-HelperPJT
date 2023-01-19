@@ -23,6 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.sparta.zipsa.entity.UserRoleEnum.ADMIN;
 
 @Service
@@ -71,14 +74,14 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         } else {
             throw new BoardException.BoardNotFoundException();
         }
-       return matchBoards;
+        return matchBoards;
     }
     // MatchBoard 선택 조회
     @Override
     @Transactional
     public MatchBoardResponseDto getMatchBoard(Long boardId, Long matchBoardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-               BoardException.BoardNotFoundException::new
+                BoardException.BoardNotFoundException::new
         );
 
         MatchBoard matchBoard = matchBoardRepository.findById(matchBoardId).orElseThrow(
@@ -138,17 +141,23 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         );
 
         // status가 모집중이면 수락된 게시물로 변경 및 help_cnt 1 증가
-        if (matchBoard.status.equals("모집중")) {
+        if (matchBoard.status.equals("신청중")) {
             matchBoard.upStatus();
-            matchBoard.addhelpCount();
+
+            User user = userRepository.findByUsername(matchBoard.getUsername()).orElseThrow(UserException.UserNotFoundException::new);
+            user.addHelpCnt();
+
+            List<MatchBoard> matchBoards = matchBoardRepository.findByStatus("신청중");
+            for (MatchBoard m : matchBoards) {
+                m.downStatus();
+            }
 
             // 이미 status가 수락된 게시물이면 익셉션 출력
-        } else if (matchBoard.status.equals("수락된 게시물")) {
-            throw new MatchException.AlreadyApplyMatchException();
-
-            // 이미 status가 거질 된 게시물이면 익셉션 출력
-        } else if(matchBoard.status.equals("거절된 게시물")) {
-            throw new MatchException();
+        } else if (matchBoard.status.equals("수락😊")) {
+            throw new MatchException.AlreadyApproveMatchException();
+            // 이미 status가 거절된 게시물이면 익셉션 출력
+        } else if(matchBoard.status.equals("거절😢")) {
+            throw new MatchException.AlreadyRejectMatchException();
         }
         return new ResponseEntity<>("수락 완료!",HttpStatus.OK);
     }
@@ -170,11 +179,10 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
             // status가 거절 완료인 상태면 익셉션 출력
         } else if (matchBoard.status.equals("거절 완료")) {
-           throw new MatchException.AlreadyRejectMatchException();
-
+            throw new MatchException.AlreadyRejectMatchException();
            // status가 수락된 게시물 상태이면 익셉션 출력
         } else if (matchBoard.status.equals("수락된 게시물")) {
-            throw new MatchException.AlreadyApplyMatchException();
+            throw new MatchException.AlreadyApproveMatchException();
         }
         return new ResponseEntity<>("거절 완료!",HttpStatus.OK);
     }

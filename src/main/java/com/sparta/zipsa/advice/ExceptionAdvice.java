@@ -63,6 +63,8 @@ public class ExceptionAdvice {
             return StatusResponse.toResponseEntity(StatusCode.ALREADY_APPLY_MATCH);
         } else if (e instanceof AlreadyRejectMatchException) {
             return StatusResponse.toResponseEntity(StatusCode.ALREADY_REJECTED_MATCH);
+        } else if (e instanceof AlreadyApproveMatchException) {
+            return StatusResponse.toResponseEntity(StatusCode.ALREADY_APPROVED_MATCH);
         }
 
         return StatusResponse.toResponseEntity(StatusCode.MATCH);

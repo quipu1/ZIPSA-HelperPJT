@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface MatchBoardRepository extends JpaRepository<MatchBoard, Long> {
     Page<MatchBoard> findAll(Pageable pageable);
+    List<MatchBoard> findByStatus(String status);
 }
