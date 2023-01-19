@@ -31,9 +31,10 @@ public enum StatusCode {
 
     //MATCH
     MATCH(BAD_REQUEST, "매칭 관련 오류입니다."),
-    ALREADY_APPLY_MATCH(BAD_REQUEST, "이미 매칭을 신청한 상태입니다"),
+    ALREADY_APPLY_MATCH(BAD_REQUEST, "이미 매칭을 신청한 상태입니다."),
 
-    ALREADY_REJECTED_MATCH(BAD_REQUEST, "이미 거절 된 상태입니다"),
+    ALREADY_REJECTED_MATCH(BAD_REQUEST, "이미 거절된 상태입니다."),
+    ALREADY_APPROVED_MATCH(BAD_REQUEST, "이미 수락된 상태입니다."),
     MATCH_NOT_FOUND(NOT_FOUND, "매칭글이 존재하지 않습니다."),
 
     //HELPER
