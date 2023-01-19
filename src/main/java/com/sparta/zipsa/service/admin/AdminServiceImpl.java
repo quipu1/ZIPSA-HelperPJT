@@ -38,11 +38,11 @@ public class AdminServiceImpl implements AdminService {
         Page<User> users;
 
         if (role.equals("customer")) {
-            users = userRepository.findByUserRoleEnum(UserRoleEnum.CUSTOMER, pageable);
+            users = userRepository.findByRole(UserRoleEnum.CUSTOMER, pageable);
         } else if (role.equals("helper")) {
-            users = userRepository.findByUserRoleEnum(UserRoleEnum.HELPER, pageable);
+            users = userRepository.findByRole(UserRoleEnum.HELPER, pageable);
         } else if (role.equals("admin")) {
-            users = userRepository.findByUserRoleEnum(UserRoleEnum.ADMIN, pageable);
+            users = userRepository.findByRole(UserRoleEnum.ADMIN, pageable);
         } else {
             throw new AdminException.InvalidAuthorityException();
         }

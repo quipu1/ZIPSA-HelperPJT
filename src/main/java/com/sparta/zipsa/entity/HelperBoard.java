@@ -35,7 +35,6 @@ public class HelperBoard extends TimeStamp {
         this.username = user.getUsername();
         this.address = user.getAddress();
         this.userImage = user.getUserImage();
-        this.helper = user.getHelper();
         this.helpCount = user.getHelpCount();
         this.message = helperBoardRequestDto.getMessage();
 
