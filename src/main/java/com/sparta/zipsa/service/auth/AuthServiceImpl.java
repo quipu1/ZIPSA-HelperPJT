@@ -8,6 +8,7 @@ import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
 import com.sparta.zipsa.exception.AdminException;
 import com.sparta.zipsa.exception.UserException;
+import com.sparta.zipsa.jwt.JwtUtil;
 import com.sparta.zipsa.repository.UserRepository;
 import com.sparta.zipsa.service.file.FileService;
 import com.sparta.zipsa.service.helperBoard.HelperBoardService;
@@ -37,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public ResponseEntity signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile) {
         String username = signupRequestDto.getUsername();
-        String password = signupRequestDto.getPassword();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String address = signupRequestDto.getAddress();
         String uuid = UUID.randomUUID().toString(); //파일 이름 중복될 수 있으니 고유 식별자 넣기 위함
         String uniqueInfo = uuid.substring(0, 7); // 너무 기니까 6번인 덱스까지만
