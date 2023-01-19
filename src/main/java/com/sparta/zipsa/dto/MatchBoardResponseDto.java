@@ -23,7 +23,7 @@ public class MatchBoardResponseDto {
 
     private Long board_id;
 
-    private int status;
+    private String status;
 
     // 추후 수정 예정
     private String profile_img;
@@ -36,7 +36,7 @@ public class MatchBoardResponseDto {
         this.username = matchBoard.getUsername();
         this.createdAt = matchBoard.getCreatedAt();
         this.modifiedAt = matchBoard.getModifiedAt();
-        this.status = matchBoard.getstatusList();
+        this.status = matchBoard.getStatus();
         this.board_id = board.getId();
         this.profile_img = getProfile_img();
     }

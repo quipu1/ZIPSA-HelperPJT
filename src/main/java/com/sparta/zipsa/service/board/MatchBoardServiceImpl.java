@@ -4,17 +4,26 @@ import com.sparta.zipsa.dto.MatchBoardRequestDto;
 import com.sparta.zipsa.dto.MatchBoardResponseDto;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.MatchBoard;
-import com.sparta.zipsa.entity.Status;
+import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.exception.BoardException;
+import com.sparta.zipsa.exception.MatchException;
+import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.BoardRepository;
 import com.sparta.zipsa.repository.HelpStatusRepository;
 import com.sparta.zipsa.repository.MatchBoardRepository;
+import com.sparta.zipsa.repository.UserRepository;
+import com.sparta.zipsa.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
+import static com.sparta.zipsa.entity.UserRoleEnum.ADMIN;
 
 @Service
 @RequiredArgsConstructor
@@ -23,33 +32,55 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     private final MatchBoardRepository matchBoardRepository;
     private final BoardRepository boardRepository;
     private final HelpStatusRepository helpStatusRepository;
+    private final UserRepository userRepository;
 
    // MatchBoard 생성
     @Override
-    public MatchBoardResponseDto createMatchBoard(Long boardId, MatchBoardRequestDto requestDto, UserDetails userDetails) {
+    public MatchBoardResponseDto createMatchBoard(Long boardId, MatchBoardRequestDto requestDto, UserDetailsImpl userDetails) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다.")
+                BoardException.BoardNotFoundException::new
         );
 
         // 유저 화인
-        // User user = userRepository.findByUsername().orElseThrow(
-        //  // () -> new 익셉션
-        // );
+         User user = userRepository.findByUsername(userDetails.getUsername()).get();
 
-        MatchBoard matchBoard = new MatchBoard(user,requestDto.getContent(),board);
+
+        MatchBoard matchBoard = new MatchBoard(user,requestDto,board);
         matchBoardRepository.save(matchBoard);
         return new MatchBoardResponseDto(matchBoard,board);
     }
+    // MatchBoard 조회 (페이징 처리)
+    @Override
+    public Page<MatchBoard> getAllMatchBoard(int page, int size, boolean isAsc, String role) {
+        // 페이징 처리
+        // 삼항연산자로 true ASC / false DESC 정렬 설정
+        // sortBy로 정렬 기준이 되는 property 설정 - id
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "id");
+        Pageable pageable = PageRequest.of(page,size,sort);
 
-    // MatchBoard 조회
+        Page<MatchBoard> matchBoards;
+
+        if (role.equals("customer")) {
+            matchBoards = matchBoardRepository.findAll(pageable);
+        } else if (role.equals("helper")) {
+            matchBoards = matchBoardRepository.findAll(pageable);
+        } else if (role.equals("admin")) {
+            matchBoards = matchBoardRepository.findAll(pageable);
+        } else {
+            throw new BoardException.BoardNotFoundException();
+        }
+       return matchBoards;
+    }
+    // MatchBoard 선택 조회
     @Override
     public MatchBoardResponseDto getMatchBoard(Long boardId, Long matchBoardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다.")
+               BoardException.BoardNotFoundException::new
         );
 
         MatchBoard matchBoard = matchBoardRepository.findById(matchBoardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다.")
+                MatchException.MatchNotFoundException::new
         );
 
         return new MatchBoardResponseDto(matchBoard,board);
@@ -57,17 +88,17 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
     // MatchBoard 수정
     @Override
-    public MatchBoardResponseDto updateMatchBoard(Long boardId, Long matchBoardId, MatchBoardRequestDto requestDto, UserDetails userDetails) {
+    public MatchBoardResponseDto updateMatchBoard(Long boardId, Long matchBoardId, MatchBoardRequestDto requestDto, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다.")
+                BoardException.BoardNotFoundException::new
         );
 
         MatchBoard matchBoard = matchBoardRepository.findById(matchBoardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다.")
+                MatchException.AlreadyApplyMatchException::new
         );
 
         if (matchBoard.getUsername() != user.getUsername() && user.getRole() != ADMIN) {
-            throw new IllegalArgumentException("권한이 없습니다");
+            throw new UserException.AuthorityException();
         }
         matchBoard.update(requestDto);
         return new MatchBoardResponseDto(matchBoardRepository.save(matchBoard),board);
@@ -75,59 +106,71 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
     // MatchBoard 삭제
     @Override
-    public ResponseEntity deleteMatchBoard(Long boardId, Long matchBoardId, UserDetails userDetails) {
+    public ResponseEntity deleteMatchBoard(Long boardId, Long matchBoardId, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다.")
+                BoardException.BoardNotFoundException::new
         );
 
         MatchBoard matchBoard = matchBoardRepository.findById(matchBoardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 MatchBoard Id가 없습니다.")
+                MatchException.MatchNotFoundException::new
         );
 
         if (matchBoard.getUsername() != user.getUsername() && user.getRole() != ADMIN) {
-            throw new IllegalArgumentException("권한이 없습니다.");
+            throw new UserException.AuthorityException();
         }
         matchBoardRepository.deleteById(matchBoardId);
         return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
 
-    // 심부름 상태 및 도움 횟수 추가(수락) 기능
-    // 도움 횟수는 수락 시 올라가지만 거절 할 때에는 내려가지 않는다.
+    // 수락 기능
     @Override
-    public boolean addStatus(Long boardId, Long matchboardId) {
+    public ResponseEntity upStatus(Long boardId, Long matchboardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다")
+                BoardException.BoardNotFoundException::new
+        );
+        MatchBoard matchBoard =matchBoardRepository.findById(matchboardId).orElseThrow(
+                MatchException.MatchNotFoundException::new
         );
 
-        MatchBoard matchBoard = matchBoardRepository.findById(matchboardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 MatchBoard Id가 없습니다.")
-        );
-        List<Status> addStatus= helpStatusRepository.findByUserAndMatchBoard(board,matchBoard);
-        if (addStatus.isEmpty()) {
-            helpStatusRepository.save(new Status(board,matchBoard));
+        // status가 모집중이면 수락된 게시물로 변경 및 help_cnt 1 증가
+        if (matchBoard.status.equals("모집중")) {
+            matchBoard.upStatus();
             matchBoard.addhelpCount();
-            return true;
+
+            // 이미 status가 수락된 게시물이면 익셉션 출력
+        } else if (matchBoard.status.equals("수락된 게시물")) {
+            throw new MatchException.AlreadyApplyMatchException();
+
+            // 이미 status가 거질 된 게시물이면 익셉션 출력
+        } else if(matchBoard.status.equals("거절된 게시물")) {
+            throw new MatchException();
         }
-        return false;
+        return new ResponseEntity<>("수락 완료!",HttpStatus.OK);
     }
 
-    // 심부름 거절 기능 추가
+    // 거절 기능
     @Override
-    public boolean deleteStatus(Long boardId, Long matchboardId) {
+    public ResponseEntity downStatus(Long boardId, Long matchboardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 Board Id가 없습니다.")
+                BoardException.BoardNotFoundException::new
         );
-
         MatchBoard matchBoard = matchBoardRepository.findById(matchboardId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 MatchBoard Id가 없습니다.")
+                MatchException.MatchNotFoundException::new
         );
 
-        List<Status> addStatus = helpStatusRepository.findByUserAndMatchBoard(board,matchBoard);
-        if (!addStatus.isEmpty()) {
-            helpStatusRepository.delete(addStatus.get(0));
-            return true;
+        // status가 모집중이면 거절된 게시물로 변경
+        if (matchBoard.status.equals("모집중")) {
+            matchBoard.downStatus();
+
+            // status가 거절 완료인 상태면 익셉션 출력
+        } else if (matchBoard.status.equals("거절 완료")) {
+           throw new MatchException();
+
+           // status가 수락된 게시물 상태이면 익셉션 출력
+        } else if (matchBoard.status.equals("수락된 게시물")) {
+            throw new MatchException.AlreadyApplyMatchException();
         }
-        return false;
+        return new ResponseEntity<>("거절 완료!",HttpStatus.OK);
     }
 
 
