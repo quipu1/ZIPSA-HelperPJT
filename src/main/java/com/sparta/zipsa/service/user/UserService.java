@@ -16,20 +16,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
-    public ResponseEntity signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile);
+    ResponseEntity signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile);
 
-    public LoginResponseDto login(LoginRequestDto loginRequestDto);
-
-
-    public ProfileResponseDto getProfile(Long user_id);
-
-    public ResponseEntity delete(DeleteRequestDto deleteRequestDto, User user);
+    LoginResponseDto login(LoginRequestDto loginRequestDto);
 
 
-    public ResponseEntity updateProfile(Long user_id, ProfileRequestDto requestDto, UserDetailsImpl userDetails);
+    ProfileResponseDto getProfile(Long userId);
+
+    ResponseEntity delete(DeleteRequestDto deleteRequestDto, User user);
 
 
-    public Page<Board> getPageBoardByUser(Long user_id, int page, int size, boolean isAsc);
+    ResponseEntity updateProfile(Long userId, ProfileRequestDto profileRequestDto, User user);
+
+
+    Page<Board> getPageBoardByUser(Long userId, int page, int size, boolean isAsc, User user);
 }
 
 

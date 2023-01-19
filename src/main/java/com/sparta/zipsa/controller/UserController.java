@@ -42,32 +42,34 @@ public class UserController {
         return new ResponseEntity("로그인 되었습니다.", HttpStatus.OK);
     }
 
-    @GetMapping("/{user_id}")
-    public ProfileResponseDto getProfile(@PathVariable Long user_id) {
+    @GetMapping("/{userId}")
+    public ProfileResponseDto getProfile(@PathVariable Long userId) {
 
-        return userService.getProfile(user_id);
+        return userService.getProfile(userId);
 
     }
 
-    @PutMapping("/{user_id}")
+    @PutMapping("/{userId}")
     public ResponseEntity updateProfile(
-            @PathVariable Long user_id,
-            @RequestBody ProfileRequestDto requestDto,
+            @PathVariable Long userId,
+            @RequestBody ProfileRequestDto profileRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
             ) {
 
-        return userService.updateProfile(user_id, requestDto, userDetails);
+        return userService.updateProfile(userId, profileRequestDto, userDetails.getUser());
 
     }
 
-    @GetMapping("/{user_id}/boards")
+    @GetMapping("/{userId}/boards")
     public Page<Board> getPageBoardByUser(
-            @PathVariable Long user_id,
+            @PathVariable Long userId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("isAsc") boolean isAsc
+
     ) {
-        return userService.getPageBoardByUser(user_id, page, size, isAsc);
+        return userService.getPageBoardByUser(userId, page, size, isAsc, userDetails.getUser());
     }
 
     @DeleteMapping("/delete")
@@ -76,6 +78,5 @@ public class UserController {
     public ResponseEntity delete(@RequestBody DeleteRequestDto deleteRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.delete(deleteRequestDto, userDetails.getUser());
     }
-
 
 }
