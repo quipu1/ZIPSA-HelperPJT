@@ -11,16 +11,21 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
     private final User user;
+
+    private final Long userId;
     private final String username;
 
-    public UserDetailsImpl(User user, String username) {
+    public UserDetailsImpl(User user, Long userId, String username) {
         this.user = user;
+        this.userId = userId;
         this.username = username;
     }
 
     public User getUser() {
         return user;
     }
+
+    public Long getUserId() { return userId; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
