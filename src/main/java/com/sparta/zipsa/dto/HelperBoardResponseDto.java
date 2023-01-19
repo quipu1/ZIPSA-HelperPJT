@@ -2,10 +2,14 @@ package com.sparta.zipsa.dto;
 
 import com.sparta.zipsa.entity.HelperBoard;
 import com.sparta.zipsa.entity.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDateTime;
 
+@Getter
+@NoArgsConstructor
 public class HelperBoardResponseDto {
 
     private Long id;

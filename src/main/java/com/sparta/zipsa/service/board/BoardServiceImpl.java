@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    private static UserRepository userRepository;
-    private static BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
 
     //게시글 생성
