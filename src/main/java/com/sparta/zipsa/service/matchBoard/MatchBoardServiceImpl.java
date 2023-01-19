@@ -9,7 +9,6 @@ import com.sparta.zipsa.exception.BoardException;
 import com.sparta.zipsa.exception.MatchException;
 import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.BoardRepository;
-import com.sparta.zipsa.repository.HelpStatusRepository;
 import com.sparta.zipsa.repository.MatchBoardRepository;
 import com.sparta.zipsa.repository.UserRepository;
 import com.sparta.zipsa.security.UserDetailsImpl;
@@ -21,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import static com.sparta.zipsa.entity.UserRoleEnum.ADMIN;
@@ -31,11 +31,11 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
     private final MatchBoardRepository matchBoardRepository;
     private final BoardRepository boardRepository;
-    private final HelpStatusRepository helpStatusRepository;
     private final UserRepository userRepository;
 
    // MatchBoard 생성
     @Override
+    @Transactional
     public MatchBoardResponseDto createMatchBoard(Long boardId, MatchBoardRequestDto requestDto, UserDetailsImpl userDetails) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
@@ -51,6 +51,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     }
     // MatchBoard 조회 (페이징 처리)
     @Override
+    @Transactional
     public Page<MatchBoard> getAllMatchBoard(int page, int size, boolean isAsc, String role) {
         // 페이징 처리
         // 삼항연산자로 true ASC / false DESC 정렬 설정
@@ -74,6 +75,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     }
     // MatchBoard 선택 조회
     @Override
+    @Transactional
     public MatchBoardResponseDto getMatchBoard(Long boardId, Long matchBoardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                BoardException.BoardNotFoundException::new
@@ -88,6 +90,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
     // MatchBoard 수정
     @Override
+    @Transactional
     public MatchBoardResponseDto updateMatchBoard(Long boardId, Long matchBoardId, MatchBoardRequestDto requestDto, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
@@ -106,6 +109,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
     // MatchBoard 삭제
     @Override
+    @Transactional
     public ResponseEntity deleteMatchBoard(Long boardId, Long matchBoardId, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
@@ -124,6 +128,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
     // 수락 기능
     @Override
+    @Transactional
     public ResponseEntity upStatus(Long boardId, Long matchboardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
@@ -150,6 +155,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
 
     // 거절 기능
     @Override
+    @Transactional
     public ResponseEntity downStatus(Long boardId, Long matchboardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
