@@ -9,12 +9,12 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardRequestDto {
     private String title;
-    private List<String> contents;
+    private String content;
     private Long price;
 
-    public BoardRequestDto(String title, List<String> contents, Long price) {
+    public BoardRequestDto(String title, String content, Long price) {
         this.title = title;
-        this.contents = contents;
+        this.content = content;
         this.price = price;
     }
 }
