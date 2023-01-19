@@ -34,21 +34,16 @@ public class User {
     @Column
     private int helpCount;
 
-    @Column
-    private int status;
-
-    private int helper;
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
     @Column(nullable = false)
-    @OneToMany(mappedBy = "username" , cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "username", cascade = CascadeType.REMOVE)
     private List<Board> boards = new ArrayList<>();
 
 
-    public User(String username, String password, String address, String userImage,UserRoleEnum role){
+    public User(String username, String password, String address, String userImage, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.address = address;
@@ -60,7 +55,7 @@ public class User {
         this.role = role;
     }
 
-    public void update(ProfileRequestDto profileRequestDto){
+    public void update(ProfileRequestDto profileRequestDto) {
         this.address = profileRequestDto.getAddress();
         this.userImage = profileRequestDto.getUserImage();
     }

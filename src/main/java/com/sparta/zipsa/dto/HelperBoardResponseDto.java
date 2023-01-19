@@ -15,8 +15,6 @@ public class HelperBoardResponseDto {
 
     private String userImage;
 
-    private int helper;
-
     private int helpCount;
 
     private String message;
@@ -29,7 +27,6 @@ public class HelperBoardResponseDto {
         this.username = helperBoard.getUsername();
         this.address = user.getAddress();
         this.userImage = user.getUserImage();
-        this.helper = user.getHelper();
         this.helpCount = user.getHelpCount();
         this.message = helperBoard.getMessage();
         this.createdAt = helperBoard.getCreatedAt();
