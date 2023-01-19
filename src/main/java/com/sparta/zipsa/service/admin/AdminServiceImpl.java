@@ -1,10 +1,12 @@
 package com.sparta.zipsa.service.admin;
 
+import com.sparta.zipsa.entity.HelperBoard;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
 import com.sparta.zipsa.exception.AdminException;
 import com.sparta.zipsa.exception.HelperException;
 import com.sparta.zipsa.exception.UserException;
+import com.sparta.zipsa.repository.HelperBoardRepository;
 import com.sparta.zipsa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +64,7 @@ public class AdminServiceImpl implements AdminService {
 
         if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
             user.changeRole(UserRoleEnum.HELPER);
+            helperBoardRepository.deleteByUsername(user.getUsername());
         } else {
             throw new HelperException.AlreadyHelperException();
         }
