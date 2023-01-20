@@ -20,7 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
+    Page<User> findDistinctByRoleAndBoardsIsNotNull(UserRoleEnum role, Pageable pageable);
+
     User deleteByUsername(String username);
 
-    Page<User> findByBoardsIsNotNull(List<Board> boards, Pageable pageable);
 }

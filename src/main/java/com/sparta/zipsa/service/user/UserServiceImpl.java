@@ -1,15 +1,10 @@
 package com.sparta.zipsa.service.user;
 
 import com.sparta.zipsa.dto.*;
-import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
-import com.sparta.zipsa.exception.AdminException;
-import com.sparta.zipsa.exception.HelperException;
 import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.UserRepository;
-import com.sparta.zipsa.service.file.FileService;
-import com.sparta.zipsa.service.helperBoard.HelperBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,14 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -54,28 +45,49 @@ public class UserServiceImpl implements UserService {
 
     //심부름 요청글 올린 Customer 전체 조회
     @Override
-    public Page<User> getApplyCustomers(int page, int size, boolean isAsc, User user) {
+    public List<UserResponseDto> getApplyCustomers(int page, int size, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "Id");
+        Sort sort = Sort.by(direction, "address");
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<User> users;
-        users = userRepository.findByBoardsIsNotNull(user.getBoards(), pageable);
-        return users;
+        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
 
+        Page<User> users = userRepository.findDistinctByRoleAndBoardsIsNotNull(UserRoleEnum.CUSTOMER, pageable);
+
+        for (User user : users) {
+            userResponseDtoList.add(new UserResponseDto(user));
+        }
+
+        return userResponseDtoList;
     }
 
-    //Helper 조회
+ //   Helper 조회
+//    @Override
+//    public List<UserResponseDto> getHelpers(int page, int size, boolean isAsc) {
+//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+//        Sort sort = Sort.by(direction, "address");
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//
+//        Page<User> users = userRepository.findByRole(UserRoleEnum.HELPER, pageable);
+//        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+//
+//
+//        for (User user: users) {
+//            userResponseDtoList.add(new UserResponseDto(user));
+//
+//        }
+//        return userResponseDtoList;
+
+//    }
+
     @Override
     public Page<User> getHelpers(int page, int size, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "Id");
+        Sort sort = Sort.by(direction, "address");
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<User> users;
-        users = userRepository.findByRole(UserRoleEnum.HELPER, pageable);
+        Page<User> users = userRepository.findByRole(UserRoleEnum.HELPER, pageable);
         return users;
-
     }
 }
 

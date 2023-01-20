@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class HelperBoardRequestDto {
-    private String message;
+    private String content;
 
-    public HelperBoardRequestDto(String message) {
-        this.message = message;
+    public HelperBoardRequestDto(String content) {
+        this.content = content;
     }
 }
