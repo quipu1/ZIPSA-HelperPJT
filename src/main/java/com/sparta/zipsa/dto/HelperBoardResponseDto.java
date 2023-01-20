@@ -33,6 +33,7 @@ public class HelperBoardResponseDto {
         this.userImage = user.getUserImage();
 //        this.helpCnt = user.getHelpCnt();
         this.message = helperBoard.getMessage();
+        
         this.createdAt = helperBoard.getCreatedAt();
         this.modifiedAt = helperBoard.getModifiedAt();
 
