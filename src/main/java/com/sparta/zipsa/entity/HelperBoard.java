@@ -25,7 +25,7 @@ public class HelperBoard extends TimeStamp {
     private int helper;
 
     @Column(nullable = false)
-    private int helpCount;
+    private int helpCnt;
 
     @Column(nullable = false)
     private String message;
