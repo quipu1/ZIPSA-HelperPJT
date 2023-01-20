@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor
@@ -26,15 +27,26 @@ public class HelperBoardResponseDto {
 
     private LocalDateTime modifiedAt;
 
-    public HelperBoardResponseDto(HelperBoard helperBoard, User user) {
+    public HelperBoardResponseDto(HelperBoard helperBoard) {
         this.id = helperBoard.getId();
         this.username = helperBoard.getUsername();
-        this.address = user.getAddress();
-        this.userImage = user.getUserImage();
-        this.helpCount = user.getHelpCnt();
+        this.address = helperBoard.getAddress();
+        this.userImage = helperBoard.getUserImage();
+        this.helpCount = helperBoard.getHelpCount();
         this.content = helperBoard.getContent();
         this.createdAt = helperBoard.getCreatedAt();
         this.modifiedAt = helperBoard.getModifiedAt();
+    }
+
+    public HelperBoardResponseDto(Optional<HelperBoard> helperBoard) {
+        this.id = helperBoard.get().getId();
+        this.username = helperBoard.get().getUsername();
+        this.address = helperBoard.get().getAddress();
+        this.userImage = helperBoard.get().getUserImage();
+        this.helpCount = helperBoard.get().getHelpCount();
+        this.content = helperBoard.get().getContent();
+        this.createdAt = helperBoard.get().getCreatedAt();
+        this.modifiedAt = helperBoard.get().getModifiedAt();
 
     }
 }

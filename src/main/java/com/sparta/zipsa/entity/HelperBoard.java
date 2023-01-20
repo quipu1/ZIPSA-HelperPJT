@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HelperBoard extends TimeStamp {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     @Column(nullable = false)
@@ -20,9 +20,6 @@ public class HelperBoard extends TimeStamp {
 
     @Column(nullable = false)
     private String userImage;
-
-    @Column(nullable = false)
-    private int helper;
 
     @Column(nullable = false)
     private int helpCount;

@@ -16,5 +16,8 @@ public interface HelperBoardService {
     ResponseEntity updateHelperBoard(Long helperBoardId, HelperBoardRequestDto helperBoardRequestDto, User user);
 
     void deleteByUsername(String username);
+
     boolean isAuthorized(User user, HelperBoard helperBoard);
+
+    HelperBoardResponseDto getHelperBoard(Long boardId, User user);
 }
