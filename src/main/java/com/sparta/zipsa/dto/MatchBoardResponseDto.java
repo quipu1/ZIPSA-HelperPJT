@@ -31,7 +31,7 @@ public class MatchBoardResponseDto {
 
     public MatchBoardResponseDto(MatchBoard matchBoard, Board board) {
         this.id = matchBoard.getId();
-        matchBoard.addhelpCount();
+//        matchBoard.addhelpCount();
         this.content = matchBoard.getContent();
         this.username = matchBoard.getUsername();
         this.createdAt = matchBoard.getCreatedAt();

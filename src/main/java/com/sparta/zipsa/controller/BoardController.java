@@ -60,14 +60,14 @@ public class BoardController {
 
     //선택한 게시글 수정
     @PatchMapping("/board/{boardId}")
-    public BoardResponseDto revisionBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal User user) {
-        return boardService.revisionBoard(boardId, boardRequest, user);
+    public BoardResponseDto revisionBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.revisionBoard(boardId, boardRequest, userDetails.getUser());
     }
 
     //선택한 게시글 삭제
     @DeleteMapping("/board/{boardId}")
-    public ResponseEntity deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal User user) {
-        return boardService.deleteBoard(boardId, user);
+    public ResponseEntity deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.deleteBoard(boardId, userDetails.getUser());
     }
 
 
