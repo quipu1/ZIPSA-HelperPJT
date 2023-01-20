@@ -8,4 +8,6 @@ public class HelperException extends RuntimeException{
 
     public static class AlreadyCustomerException extends HelperException {}
 
+    public static class HelperNotFoundException extends HelperException {}
+
 }

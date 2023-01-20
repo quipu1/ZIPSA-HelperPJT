@@ -64,7 +64,11 @@ public class AdminServiceImpl implements AdminService {
 
         if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
             user.changeRole(UserRoleEnum.HELPER);
-            helperBoardRepository.deleteByUsername(user.getUsername());
+            try {
+                helperBoardRepository.deleteByUsername(user.getUsername());
+            } catch (Exception e){
+                throw new HelperException.HelperNotFoundException();
+            }
         } else {
             throw new HelperException.AlreadyHelperException();
         }
