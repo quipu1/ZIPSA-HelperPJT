@@ -61,33 +61,22 @@ public class UserServiceImpl implements UserService {
         return userResponseDtoList;
     }
 
- //   Helper 조회
-//    @Override
-//    public List<UserResponseDto> getHelpers(int page, int size, boolean isAsc) {
-//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-//        Sort sort = Sort.by(direction, "address");
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        Page<User> users = userRepository.findByRole(UserRoleEnum.HELPER, pageable);
-//        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
-//
-//
-//        for (User user: users) {
-//            userResponseDtoList.add(new UserResponseDto(user));
-//
-//        }
-//        return userResponseDtoList;
-
-//    }
-
+    //Helper 조회
     @Override
-    public Page<User> getHelpers(int page, int size, boolean isAsc) {
+    public List<UserResponseDto> getHelpers(int page, int size, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "address");
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<User> users = userRepository.findByRole(UserRoleEnum.HELPER, pageable);
-        return users;
+        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+
+
+        for (User user : users) {
+            userResponseDtoList.add(new UserResponseDto(user));
+
+        }
+        return userResponseDtoList;
     }
 }
 

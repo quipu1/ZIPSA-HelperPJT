@@ -25,8 +25,7 @@ public interface UserService {
 
     List<UserResponseDto> getApplyCustomers(int page, int size, boolean isAsc);
 
-    Page<User> getHelpers(int page, int size, boolean isAsc);
-//    List<UserResponseDto> getHelpers(int page, int size, boolean isAsc);
+    List<UserResponseDto> getHelpers(int page, int size, boolean isAsc);
 }
 
 

@@ -46,23 +46,15 @@ public class UserController {
         return userService.getApplyCustomers(page-1, size, isAsc);
     }
 
-    //Helper 조회
+
     @GetMapping("/helper")
-    public Page<User> getHelpers(
+    public List<UserResponseDto> getHelpers(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("isAsc") boolean isAsc
     ) {
         return userService.getHelpers(page-1, size, isAsc);
     }
-//    @GetMapping("/helper")
-//    public List<UserResponseDto> getHelpers(
-//            @RequestParam("page") int page,
-//            @RequestParam("size") int size,
-//            @RequestParam("isAsc") boolean isAsc
-//    ) {
-//        return userService.getHelpers(page-1, size, isAsc);
-//    }
 
 
 }
