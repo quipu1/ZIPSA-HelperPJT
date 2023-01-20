@@ -22,6 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findDistinctByRoleAndBoardsIsNotNull(UserRoleEnum role, Pageable pageable);
 
-    User deleteByUsername(String username);
+    void deleteByUsername(String username);
 
 }

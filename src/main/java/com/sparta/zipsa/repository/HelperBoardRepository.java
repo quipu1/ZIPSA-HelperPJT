@@ -10,5 +10,5 @@ public interface HelperBoardRepository extends JpaRepository<HelperBoard, Long> 
 
     Optional<HelperBoard> findByUsername(String username);
 
-    HelperBoard deleteByUsername(String username);
+    void deleteByUsername(String username);
 }

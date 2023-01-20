@@ -66,8 +66,8 @@ public class BoardController {
 
     //선택한 게시글 삭제
     @DeleteMapping("/board/{boardId}")
-    public ResponseEntity deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal User user) {
-        return boardService.deleteBoard(boardId, user);
+    public ResponseEntity deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.deleteBoard(boardId, userDetails.getUser());
     }
 
 
