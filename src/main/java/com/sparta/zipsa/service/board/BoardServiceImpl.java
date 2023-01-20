@@ -104,9 +104,11 @@ public class BoardServiceImpl implements BoardService {
         checkUser(user, board);
         boardRepository.deleteById(boardId);
 
-        String deletePrint = Long.toString(boardId);
-        String print = "게시글이 삭제되었습니다.";
-        deletePrint.concat(print);
+        StringBuffer deletePrint = new StringBuffer();
+        String boardIdChar = Long.toString(boardId);
+        String print = "번 게시글이 삭제되었습니다.";
+        deletePrint.append(boardIdChar);
+        deletePrint.append(print);
 
 
         return new ResponseEntity<>(deletePrint, HttpStatus.OK);
