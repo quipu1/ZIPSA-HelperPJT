@@ -1,6 +1,7 @@
 package com.sparta.zipsa.service.helperBoard;
 
 import com.sparta.zipsa.dto.HelperBoardRequestDto;
+import com.sparta.zipsa.dto.HelperBoardResponseDto;
 import com.sparta.zipsa.entity.HelperBoard;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
@@ -9,11 +10,14 @@ import com.sparta.zipsa.exception.HelperException;
 import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.HelperBoardRepository;
 import com.sparta.zipsa.service.helperBoard.HelperBoardService;
+import com.sparta.zipsa.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +39,7 @@ public class HelperBoardServiceImpl implements HelperBoardService {
         }
         return new ResponseEntity("집사 권한을 신청했습니다.", HttpStatus.OK);
     }
+
     //집사 신청글 삭제
     @Override
     public ResponseEntity deleteHelperBoard(Long helperBoardId, User user) {
@@ -46,21 +51,31 @@ public class HelperBoardServiceImpl implements HelperBoardService {
         }
         throw new UserException.AuthorityException();
     }
+
     //집사 신청글 업데이트
     @Override
     public ResponseEntity updateHelperBoard(Long helperBoardId, HelperBoardRequestDto helperBoardRequestDto, User user) {
         HelperBoard helperBoard = helperBoardRepository.findById(helperBoardId).orElseThrow(BoardException.BoardNotFoundException::new);
         //권한 있는지 확인
-        if (isAuthorized(user,helperBoard)) {
+        if (isAuthorized(user, helperBoard)) {
             helperBoard.update(helperBoardRequestDto);
             return new ResponseEntity("집사 권한 신청글이 수정 되었습니다.", HttpStatus.OK);
         }
         throw new UserException.AuthorityException();
     }
+
     //현재 로그인한 유저의 유저네임이 일치하거나 ADMIN 권한 가지고 있는지 확인
     public boolean isAuthorized(User user, HelperBoard helperBoard) {
         return user.getUsername().equals(helperBoard.getUsername()) || user.getRole().equals(UserRoleEnum.ADMIN);
     }
+
+    //집사 신청글 조회
+    @Override
+    public HelperBoardResponseDto getHelperBoard(Long boardId, User user) {
+        Optional<HelperBoard> helperBoard = helperBoardRepository.findByUsername(user.getUsername());
+        return new HelperBoardResponseDto(helperBoard);
+    }
+
     //UserServiceImpl에서 회원 탈퇴 시 helperBoard도 같이 삭제하기 위해 만든 메소드
     public void deleteByUsername(String username) {
         helperBoardRepository.deleteByUsername(username);
