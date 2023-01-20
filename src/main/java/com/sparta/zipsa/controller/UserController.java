@@ -38,9 +38,9 @@ public class UserController {
     //심부름 요청글 올린 Customer 전체 조회
     @GetMapping("/customer")
     public List<UserResponseDto> getApplyCustomers(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("isAsc") boolean isAsc
+            @RequestParam(value = "page", defaultValue = "1") int page, //쿼리스트링 입력 안할 시 기본설정
+            @RequestParam(value = "size", defaultValue = "3") int size,
+            @RequestParam(value = "isAsc", defaultValue = "true") boolean isAsc
 
     ) {
         return userService.getApplyCustomers(page-1, size, isAsc);
@@ -49,9 +49,9 @@ public class UserController {
 
     @GetMapping("/helper")
     public List<UserResponseDto> getHelpers(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("isAsc") boolean isAsc
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "3") int size,
+            @RequestParam(value = "isAsc", defaultValue = "true") boolean isAsc
     ) {
         return userService.getHelpers(page-1, size, isAsc);
     }
