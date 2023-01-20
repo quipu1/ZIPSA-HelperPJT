@@ -37,11 +37,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public ResponseEntity signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile) {
+
         String username = signupRequestDto.getUsername();
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String address = signupRequestDto.getAddress();
         String uuid = UUID.randomUUID().toString(); //파일 이름 중복될 수 있으니 고유 식별자 넣기 위함
-        String uniqueInfo = uuid.substring(0, 7); // 너무 기니까 6번인 덱스까지만
+        String uniqueInfo = uuid.substring(0, 7); // 너무 기니까 6번인덱스까지만
         String fileName = uniqueInfo + "-" + multipartFile.getOriginalFilename(); //uuid + 원본 파일 이름
 
         Optional<User> foundUser = userRepository.findByUsername(username);
@@ -55,9 +56,14 @@ public class AuthServiceImpl implements AuthService {
             }
             role = UserRoleEnum.ADMIN;
         }
-        fileService.constructor(); //저장경로 없으면 만들어주려나 포스트맨 돌려보고 싶은데..
-        fileService.upload(multipartFile, fileName); //업로드할 사진, uuid 적용한 파일이름
+
         String userImage = fileName; //User에 넣어줄 userImage에는 파일 이름을 넣어줬음
+        if(!multipartFile.isEmpty()) { //이미지파일 안넣어주면 파일 안만들고, 지정된 유저이미지이름 주입
+            fileService.constructor(); //저장경로 없으면 만들어주려나 포스트맨 돌려보고 싶은데..->확인완료
+            fileService.upload(multipartFile, fileName); //업로드할 사진, uuid 적용한 파일이름
+        }else{
+            userImage = "920ba86-defaultImage";
+        }
         User user = new User(username, password, address, userImage, role);
         userRepository.save(user);
         return new ResponseEntity("회원 가입 완료", HttpStatus.OK);

@@ -81,6 +81,8 @@ public class ExceptionAdvice {
         }
         else if (e instanceof AlreadyCustomerException) {
             return StatusResponse.toResponseEntity(StatusCode.ALREADY_CUSTOMER);
+        } else if (e instanceof HelperNotFoundException) {
+            return StatusResponse.toResponseEntity(StatusCode.HELPER_NOT_FOUND);
         }
 
         return StatusResponse.toResponseEntity(StatusCode.HELPER);

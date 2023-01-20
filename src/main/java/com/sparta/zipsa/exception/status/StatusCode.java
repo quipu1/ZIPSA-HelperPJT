@@ -43,6 +43,8 @@ public enum StatusCode {
     ALREADY_HELPER(BAD_REQUEST, "이미 HELPER 권한인 사용자입니다."),
     ALREADY_CUSTOMER(BAD_REQUEST, "이미 CUSTOMER 권한인 사용자입니다."),
 
+    HELPER_NOT_FOUND(NOT_FOUND, "HELPER 신청글이 존재하지 않습니다."),
+
     //ADMIN
     ADMIN(BAD_REQUEST, "ADMIN 관련 오류입니다."),
     ADMIN_PASSWORD_NOT_MATCH(BAD_REQUEST, "관리자 암호가 일치하지 않아 등록이 불가합니다."),

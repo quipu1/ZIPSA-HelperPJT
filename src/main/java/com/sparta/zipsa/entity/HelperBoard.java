@@ -28,20 +28,20 @@ public class HelperBoard extends TimeStamp {
     private int helpCnt;
 
     @Column(nullable = false)
-    private String message;
+    private String content;
 
     public HelperBoard(HelperBoardRequestDto helperBoardRequestDto, User user) {
 
         this.username = user.getUsername();
         this.address = user.getAddress();
         this.userImage = user.getUserImage();
-//        this.helpCnt = user.getHelpCnt();
-        this.message = helperBoardRequestDto.getMessage();
+        this.helpCount = user.getHelpCnt();
+        this.content = helperBoardRequestDto.getContent();
 
     }
 
     public void update(HelperBoardRequestDto helperBoardRequestDto) {
-        this.message = helperBoardRequestDto.getMessage();
+        this.content = helperBoardRequestDto.getContent();
     }
 
 
