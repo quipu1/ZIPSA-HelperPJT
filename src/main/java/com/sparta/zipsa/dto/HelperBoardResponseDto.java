@@ -21,7 +21,7 @@ public class HelperBoardResponseDto {
 
     private int helpCount;
 
-    private String message;
+    private String content;
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
@@ -31,8 +31,8 @@ public class HelperBoardResponseDto {
         this.username = helperBoard.getUsername();
         this.address = user.getAddress();
         this.userImage = user.getUserImage();
-        this.helpCount = user.getHelpCount();
-        this.message = helperBoard.getMessage();
+        this.helpCount = user.getHelpCnt();
+        this.content = helperBoard.getContent();
         this.createdAt = helperBoard.getCreatedAt();
         this.modifiedAt = helperBoard.getModifiedAt();
 

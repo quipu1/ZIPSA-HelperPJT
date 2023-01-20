@@ -39,7 +39,7 @@ public class User {
     private UserRoleEnum role;
 
     @Column(nullable = false)
-    @OneToMany(mappedBy = "username", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Board> boards = new ArrayList<>();
 
 

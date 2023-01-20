@@ -15,15 +15,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService {
 
     ProfileResponseDto getProfile(Long userId);
 
     ResponseEntity updateProfile(Long userId, ProfileRequestDto profileRequestDto, User user);
 
-    Page<User> getApplyCustomers(int page, int size, boolean isAsc, User user);
+    List<UserResponseDto> getApplyCustomers(int page, int size, boolean isAsc);
 
     Page<User> getHelpers(int page, int size, boolean isAsc);
+//    List<UserResponseDto> getHelpers(int page, int size, boolean isAsc);
 }
 
 
