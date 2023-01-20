@@ -48,7 +48,7 @@ public class MatchBoardController {
     }
 
     // Match 신청글 삭제
-    @DeleteMapping("/api/board/{board_id}/mathchboard/{matchBoard_id}")
+    @DeleteMapping("/api/board/{board_id}/matchboard/{matchBoard_id}")
     public ResponseEntity deleteMatchBoard(@PathVariable Long board_id, @PathVariable Long matchBoard_id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return matchBoardService.deleteMatchBoard(board_id,matchBoard_id,userDetails.getUser());
     }

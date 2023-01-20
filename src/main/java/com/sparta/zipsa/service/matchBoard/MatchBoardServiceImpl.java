@@ -99,9 +99,9 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     @Override
     @Transactional
     public ResponseEntity deleteMatchBoard(Long boardId, Long matchBoardId, User user) {
-        Board board = boardRepository.findById(boardId).orElseThrow(
-                BoardException.BoardNotFoundException::new
-        );
+//        Board board = boardRepository.findById(boardId).orElseThrow(
+//                BoardException.BoardNotFoundException::new
+//        );
 
         MatchBoard matchBoard = matchBoardRepository.findById(matchBoardId).orElseThrow(
                 MatchException.MatchNotFoundException::new
