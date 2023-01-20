@@ -1,5 +1,4 @@
 package com.sparta.zipsa.service.matchBoard;
-
 import com.sparta.zipsa.dto.MatchBoardRequestDto;
 import com.sparta.zipsa.dto.MatchBoardResponseDto;
 import com.sparta.zipsa.entity.Board;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.sparta.zipsa.entity.UserRoleEnum.ADMIN;
 
@@ -36,7 +34,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-   // MatchBoard 생성
+    // MatchBoard 생성
     @Override
     @Transactional
     public MatchBoardResponseDto createMatchBoard(Long boardId, MatchBoardRequestDto requestDto, UserDetailsImpl userDetails) {
@@ -45,36 +43,23 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         );
 
         // 유저 화인
-         User user = userRepository.findByUsername(userDetails.getUsername()).get();
+        User user = userRepository.findByUsername(userDetails.getUsername()).get();
 
 
-        MatchBoard matchBoard = new MatchBoard(user,requestDto,board);
+        MatchBoard matchBoard = new MatchBoard(user,requestDto);
         matchBoardRepository.save(matchBoard);
         return new MatchBoardResponseDto(matchBoard,board);
     }
     // MatchBoard 조회 (페이징 처리)
     @Override
     @Transactional
-    public Page<MatchBoard> getAllMatchBoard(int page, int size, boolean isAsc, String role) {
-        // 페이징 처리
-        // 삼항연산자로 true ASC / false DESC 정렬 설정
-        // sortBy로 정렬 기준이 되는 property 설정 - id
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "id");
+    public Page<MatchBoardResponseDto> getAllMatchBoard(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page,size,sort);
 
-        Page<MatchBoard> matchBoards;
-
-        if (role.equals("customer")) {
-            matchBoards = matchBoardRepository.findAll(pageable);
-        } else if (role.equals("helper")) {
-            matchBoards = matchBoardRepository.findAll(pageable);
-        } else if (role.equals("admin")) {
-            matchBoards = matchBoardRepository.findAll(pageable);
-        } else {
-            throw new BoardException.BoardNotFoundException();
-        }
-        return matchBoards;
+        Page<MatchBoard> matchBoards = matchBoardRepository.findAll(pageable);
+        Page<MatchBoardResponseDto> matchBoardListDto = matchBoards.map(MatchBoardResponseDto::toMatchBoardResponseDto);
+        return matchBoardListDto;
     }
     // MatchBoard 선택 조회
     @Override
@@ -180,7 +165,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
             // status가 거절 완료인 상태면 익셉션 출력
         } else if (matchBoard.status.equals("거절 완료")) {
             throw new MatchException.AlreadyRejectMatchException();
-           // status가 수락된 게시물 상태이면 익셉션 출력
+            // status가 수락된 게시물 상태이면 익셉션 출력
         } else if (matchBoard.status.equals("수락된 게시물")) {
             throw new MatchException.AlreadyApproveMatchException();
         }

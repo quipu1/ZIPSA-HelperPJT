@@ -2,17 +2,20 @@ package com.sparta.zipsa.dto;
 
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.MatchBoard;
+import com.sparta.zipsa.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class MatchBoardResponseDto {
 
     private Long id;
-    private int help_cnt;
+    private int helpCnt;
     private String content;
 
     private String username;
@@ -21,25 +24,38 @@ public class MatchBoardResponseDto {
 
     private LocalDateTime modifiedAt;
 
-    private Long board_id;
+    private Long boardId;
 
     private String status;
 
-    // 추후 수정 예정
-    private String profile_img;
+    private String userImg;
 
 
     public MatchBoardResponseDto(MatchBoard matchBoard, Board board) {
         this.id = matchBoard.getId();
-        matchBoard.addhelpCount();
+        this.helpCnt = matchBoard.getHelpCnt();
         this.content = matchBoard.getContent();
         this.username = matchBoard.getUsername();
         this.createdAt = matchBoard.getCreatedAt();
         this.modifiedAt = matchBoard.getModifiedAt();
         this.status = matchBoard.getStatus();
-        this.board_id = board.getId();
-        this.profile_img = getProfile_img();
+        this.boardId = board.getId();
+        this.userImg = matchBoard.getUserImg();
     }
 
 
+
+    public static MatchBoardResponseDto toMatchBoardResponseDto(final MatchBoard matchBoard) {
+        return MatchBoardResponseDto.builder()
+                .id(matchBoard.getId())
+                .username(matchBoard.getUsername())
+                .content(matchBoard.getContent())
+                .createdAt(matchBoard.getCreatedAt())
+                .modifiedAt(matchBoard.getModifiedAt())
+                .status(matchBoard.getStatus())
+                .boardId(matchBoard.getId())
+                .helpCnt(matchBoard.getHelpCnt())
+                .userImg(matchBoard.getUserImg())
+                .build();
+    }
 }
