@@ -37,6 +37,14 @@ public class HelperBoard extends TimeStamp {
 
     }
 
+    public HelperBoard(String username, String address, String userImage, int helpCount, String content) {
+        this.username = username;
+        this.address = address;
+        this.userImage = userImage;
+        this.helpCount = helpCount;
+        this.content = content;
+    }
+
     public void update(HelperBoardRequestDto helperBoardRequestDto) {
         this.content = helperBoardRequestDto.getContent();
     }

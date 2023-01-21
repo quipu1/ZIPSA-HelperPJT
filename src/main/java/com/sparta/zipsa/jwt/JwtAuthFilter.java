@@ -5,6 +5,7 @@ import com.sparta.zipsa.dto.SecurityExceptionDto;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -36,7 +37,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Claims info = jwtUtil.getUserInfoFromToken(token);
             setAuthentication(info.getSubject());
         }
-        filterChain.doFilter(request,response);
+//        try {
+            filterChain.doFilter(request, response);
+//        }catch(FileUploadException e){
+//            jwtExceptionHandler(response,"File Upload Error",400);
+//        }
     }
 
     public void setAuthentication(String username) {

@@ -5,8 +5,11 @@ import com.sparta.zipsa.dto.HelperBoardRequestDto;
 import com.sparta.zipsa.dto.HelperBoardResponseDto;
 import com.sparta.zipsa.entity.HelperBoard;
 import com.sparta.zipsa.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
 
 public interface HelperBoardService {
     ResponseEntity createHelperBoard(HelperBoardRequestDto helperBoardRequestDto, User user);
@@ -19,5 +22,7 @@ public interface HelperBoardService {
 
     boolean isAuthorized(User user, HelperBoard helperBoard);
 
-    HelperBoardResponseDto getHelperBoard(Long boardId, User user);
+    HelperBoardResponseDto getHelperBoard(User user);
+
+    List<HelperBoardResponseDto> getHelperBoardList(User user, String search, int page, int size, boolean isAsc);
 }
