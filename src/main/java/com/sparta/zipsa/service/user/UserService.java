@@ -21,11 +21,11 @@ public interface UserService {
 
     ProfileResponseDto getProfile(Long userId);
 
-    ResponseEntity updateProfile(Long userId, ProfileRequestDto profileRequestDto, User user);
+    List<UserResponseDto> getApplyCustomers(String search, int page, int size, boolean isAsc);
 
-    List<UserResponseDto> getApplyCustomers(int page, int size, boolean isAsc);
+    List<UserResponseDto> getHelpers(String search, int page, int size, boolean isAsc);
 
-    List<UserResponseDto> getHelpers(int page, int size, boolean isAsc);
+    ResponseEntity updateProfile(Long userId, MultipartFile multipartFile, ProfileRequestDto profileRequestDto, User user);
 }
 
 

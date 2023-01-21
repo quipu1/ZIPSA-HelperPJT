@@ -1,6 +1,7 @@
 package com.sparta.zipsa.dto;
 
 import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.entity.UserRoleEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,9 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProfileResponseDto {
 
-    User user;
+    private String username;
+    private String address;
+    private String userImage;
+    private int helpCnt;
+    private UserRoleEnum role;
 
     public ProfileResponseDto(User user){
-        this.user = user;
+        this.username = user.getUsername();
+        this.address = user.getAddress();
+        this.userImage = user.getUserImage();
+        this.helpCnt = user.getHelpCnt();
+        this.role = user.getRole();
     }
 }

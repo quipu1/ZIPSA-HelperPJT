@@ -38,6 +38,11 @@ public class MatchBoard extends TimeStamp{
         this.content = requestDto.getContent();
         this.board = board;
     }
+    public MatchBoard( String content, String username,Board board) {
+        this.content = content;
+        this.username = username;
+        this.board = board;
+    }
 
     // @ColumnDefault 어노테이션 사용으로 기본 값 0부터 시작
     // ServiceImpl에서 수락을 할 시 해당 카운트가 올라가도록 해놨는데 잘 될지 모르겠어요

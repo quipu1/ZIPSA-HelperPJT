@@ -59,8 +59,12 @@ public class User {
         this.helpCnt += 1;
     }
 
-    public void update(ProfileRequestDto profileRequestDto) {
+    public void update(ProfileRequestDto profileRequestDto, String filename) {
         this.address = profileRequestDto.getAddress();
-        this.userImage = profileRequestDto.getUserImage();
+        this.userImage = filename;
+    }
+
+    public void updateNotImage(ProfileRequestDto profileRequestDto) {
+        this.address = profileRequestDto.getAddress();
     }
 }

@@ -62,4 +62,14 @@ public class Board extends TimeStamp {
         this.content = content;
     }
 
+    public Board( String username, String title, String content, String address, Long price, String status, User user){
+        this.user = user;
+        this.username = username;
+        this.title = title;
+        this.content = content;
+        this.address = address;
+        this.price = price;
+        this.status = status;
+    }
+
 }
