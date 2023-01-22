@@ -37,11 +37,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Claims info = jwtUtil.getUserInfoFromToken(token);
             setAuthentication(info.getSubject());
         }
-//        try {
+        try {
             filterChain.doFilter(request, response);
-//        }catch(FileUploadException e){
-//            jwtExceptionHandler(response,"File Upload Error",400);
-//        }
+        }catch(FileUploadException e){
+            jwtExceptionHandler(response,"File Upload Error",400);
+        }
     }
 
     public void setAuthentication(String username) {

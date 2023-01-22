@@ -36,6 +36,8 @@ public class FileServiceImpl implements FileService {
     //파일 삭제
     @Override
     public void deleteFile(String filename) {
-        new File(location + filename).delete();
+        if(!filename.equals("920ba86-defaultImage.jpg")){
+            new File(location + filename).delete();
+        }
     }
 }

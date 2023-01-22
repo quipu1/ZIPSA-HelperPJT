@@ -48,9 +48,11 @@ public class MatchBoard extends TimeStamp{
         this.board = board;
     }
 
-    public MatchBoard( String content, String username) {
+    public MatchBoard( String content, String username, Board board, String userImg) {
         this.content = content;
         this.username = username;
+        this.board = board;
+        this.userImg = userImg;
     }
 
     public void upStatus() {
