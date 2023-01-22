@@ -35,16 +35,17 @@ public class MatchBoard extends TimeStamp{
     public String userImg;
 
     // 한개의 게시글에 여러개의 신청을 할 수 있다..?
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_Id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_Id", nullable = false)
     private Board board;
 
 
-    public MatchBoard(User user, MatchBoardRequestDto requestDto) {
+    public MatchBoard(User user, Board board, MatchBoardRequestDto requestDto) {
         this.content = requestDto.getContent();
         this.username = user.getUsername();
         this.helpCnt = user.getHelpCnt();
         this.userImg = user.getUserImage();
+        this.board = board;
     }
 
     public MatchBoard( String content, String username) {
