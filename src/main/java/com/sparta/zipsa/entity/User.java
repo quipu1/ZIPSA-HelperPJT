@@ -67,4 +67,8 @@ public class User {
     public void updateNotImage(ProfileRequestDto profileRequestDto) {
         this.address = profileRequestDto.getAddress();
     }
+
+    public void modifyPassword(String password){
+        this.password = password;
+    }
 }

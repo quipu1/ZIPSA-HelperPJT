@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
             fileService.constructor(); //저장경로 없으면 생성
             fileService.upload(multipartFile, fileName); //업로드할 사진, uuid 적용한 파일이름
         }else{
-            userImage = "920ba86-defaultImage";
+            userImage = "920ba86-defaultImage.jpg";
         }
         User user = new User(username, password, address, userImage, role);
         userRepository.save(user);

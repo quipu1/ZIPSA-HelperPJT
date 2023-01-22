@@ -26,6 +26,8 @@ public interface UserService {
     List<UserResponseDto> getHelpers(String search, int page, int size, boolean isAsc);
 
     ResponseEntity updateProfile(Long userId, MultipartFile multipartFile, ProfileRequestDto profileRequestDto, User user);
+
+    ResponseEntity modifyPassword(Long userId, User user, PasswordRequestDto passwordRequestDto);
 }
 
 

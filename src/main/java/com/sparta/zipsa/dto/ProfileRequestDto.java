@@ -9,7 +9,4 @@ public class ProfileRequestDto {
 
     String address;
 
-    String userImage;
-
-
 }

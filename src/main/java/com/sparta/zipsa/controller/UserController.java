@@ -38,6 +38,11 @@ public class UserController {
         return userService.updateProfile(userId, multipartFile, profileRequestDto, userDetails.getUser());
     }
 
+    //비밀번호 변경
+    @PutMapping("/password/{userId}")
+    public ResponseEntity modifyPassword(@PathVariable Long userId, @RequestBody @Valid PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.modifyPassword(userId, userDetails.getUser(), passwordRequestDto);
+    }
 
     //심부름 요청글 올린 Customer 전체 조회
     @GetMapping("/customer")

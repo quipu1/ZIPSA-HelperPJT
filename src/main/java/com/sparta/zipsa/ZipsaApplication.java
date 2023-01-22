@@ -27,7 +27,7 @@ public class ZipsaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ZipsaApplication.class, args);
 	}
-
+//
 //	@Bean
 //	public CommandLineRunner test(UserRepository userRepository,
 //								  PasswordEncoder passwordEncoder,
@@ -80,16 +80,19 @@ public class ZipsaApplication {
 //			boardRepository.save(board9);
 //			boardRepository.save(board10);
 //
-//			MatchBoard matchBoard1 = new MatchBoard("저 벌레 잘 잡습니다","user2");
-//			MatchBoard matchBoard2 = new MatchBoard("벌레 잡기 고수입니다","user3");
-//			MatchBoard matchBoard3 = new MatchBoard("벌레퇴치 1초컷","user4");
-//			MatchBoard matchBoard4 = new MatchBoard("청소의왕입니다","user5");
-//			MatchBoard matchBoard5 = new MatchBoard("화장실청소 고수임!","user6");
-//			MatchBoard matchBoard6 = new MatchBoard("애기돌보기 마스터입니다","user7");
-//			MatchBoard matchBoard7 = new MatchBoard("어디든 10초안에 배달가능","user8");
-//			MatchBoard matchBoard8 = new MatchBoard("조립마스터입니다","user9");
-//			MatchBoard matchBoard9 = new MatchBoard("총알배송가능","user10");
-//			MatchBoard matchBoard10 = new MatchBoard("1초만에 조립가능","user1");
+//
+//
+//			MatchBoard matchBoard1 = new MatchBoard("저 벌레 잘 잡습니다","user2", board1, "b35a192-profileImage");
+//			MatchBoard matchBoard2 = new MatchBoard("벌레 잡기 고수입니다","user3", board1, "920ba86-defaultImage");
+//			MatchBoard matchBoard3 = new MatchBoard("벌레퇴치 1초컷","user4", board1,"6426825-Cat03.jpg");
+//			MatchBoard matchBoard4 = new MatchBoard("청소의왕입니다","user5", board2,"92dd8ee-33.png");
+//			MatchBoard matchBoard5 = new MatchBoard("화장실청소 고수임!","user6", board2,"920ba86-defaultImage");
+//			MatchBoard matchBoard6 = new MatchBoard("애기돌보기 마스터입니다","user7", board3,"920ba86-defaultImage");
+//			MatchBoard matchBoard7 = new MatchBoard("어디든 10초안에 배달가능","user8", board4,"920ba86-defaultImage");
+//			MatchBoard matchBoard8 = new MatchBoard("조립마스터입니다","user9", board5,"920ba86-defaultImage");
+//			MatchBoard matchBoard9 = new MatchBoard("총알배송가능","user10", board4,"920ba86-defaultImage");
+//			MatchBoard matchBoard10 = new MatchBoard("1초만에 조립가능","user1", board5,"920ba86-defaultImage");
+//
 //			matchBoardRepository.save(matchBoard1);
 //			matchBoardRepository.save(matchBoard2);
 //			matchBoardRepository.save(matchBoard3);
@@ -124,11 +127,6 @@ public class ZipsaApplication {
 //			helperBoardRepository.save(helperBoard9);
 //			helperBoardRepository.save(helperBoard10);
 //
-//
-//
 //		};
 //	}
 }
-
-
-
