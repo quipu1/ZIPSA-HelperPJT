@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
         }
         if (!multipartFile.isEmpty()) {
             fileService.constructor();
+            fileService.deleteFile(user.getUserImage());
             fileService.upload(multipartFile, fileName);
             user.update(profileRequestDto, fileName);
         } else user.updateNotImage(profileRequestDto);
