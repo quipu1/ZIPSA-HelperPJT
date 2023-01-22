@@ -53,10 +53,10 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         // 헬퍼인지를 확인, 이미 작성했으면 못쓰게 한다
         if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
             throw new UserException.AuthorityException();
-        } else if (matchBoardRepository.findByUsername(user.getUsername()).isPresent()) {
+        } else if (matchBoardRepository.findByUsernameAndBoard(user.getUsername(), board).isPresent()) {
             throw new MatchException.AlreadyMatchBoardFoundExcption();
         } else {
-            MatchBoard matchBoard = new MatchBoard(user,requestDto);
+            MatchBoard matchBoard = new MatchBoard(user, board, requestDto);
             matchBoardRepository.save(matchBoard);
             return new MatchBoardResponseDto(matchBoard,board);
         }
@@ -147,7 +147,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
             User user = userRepository.findByUsername(matchBoard.getUsername()).orElseThrow(UserException.UserNotFoundException::new);
             user.addHelpCnt();
 
-            List<MatchBoard> matchBoards = matchBoardRepository.findByStatus("신청중");
+            List<MatchBoard> matchBoards = matchBoardRepository.findByBoardAndStatus(board, "신청중");
             for (MatchBoard m : matchBoards) {
                 m.downStatus();
             }
@@ -174,14 +174,14 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         );
 
         // status가 모집중이면 거절된 게시물로 변경
-        if (matchBoard.status.equals("모집중")) {
+        if (matchBoard.status.equals("신청중")) {
             matchBoard.downStatus();
 
             // status가 거절 완료인 상태면 익셉션 출력
-        } else if (matchBoard.status.equals("거절 완료")) {
+        } else if (matchBoard.status.equals("거절😢")) {
             throw new MatchException.AlreadyRejectMatchException();
            // status가 수락된 게시물 상태이면 익셉션 출력
-        } else if (matchBoard.status.equals("수락된 게시물")) {
+        } else if (matchBoard.status.equals("수락😊")) {
             throw new MatchException.AlreadyApproveMatchException();
         }
         return new ResponseEntity<>("거절 완료!",HttpStatus.OK);
