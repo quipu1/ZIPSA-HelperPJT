@@ -52,7 +52,7 @@ public class Board extends TimeStamp {
         this.user = user;
     }
 
-    public void changeStatus(String status)
+    public void changeStatus()
     {
         this.status = "완료";
     }

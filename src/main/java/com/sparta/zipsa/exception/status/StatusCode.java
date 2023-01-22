@@ -36,6 +36,7 @@ public enum StatusCode {
     ALREADY_REJECTED_MATCH(BAD_REQUEST, "이미 거절된 상태입니다."),
     ALREADY_APPROVED_MATCH(BAD_REQUEST, "이미 수락된 상태입니다."),
     MATCH_NOT_FOUND(NOT_FOUND, "매칭글이 존재하지 않습니다."),
+    ALREADY_MATCHBOARD_FOUND(BAD_REQUEST, "이미 게시글을 등록하셨습니다."),
 
     //HELPER
     HELPER(BAD_REQUEST, "HELPER 신청 관련 오류입니다."),

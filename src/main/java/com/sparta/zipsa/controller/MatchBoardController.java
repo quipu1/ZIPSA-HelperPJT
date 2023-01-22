@@ -27,13 +27,11 @@ public class MatchBoardController {
     // Match 신청글 전체 조회 (페이징 처리)
     @GetMapping("/api/board/matchboard")
     @ResponseStatus(HttpStatus.OK)
-    public Page<MatchBoard> getAllMatchBoard(
+    public Page<MatchBoardResponseDto> getAllMatchBoard(
             @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("isAsc") boolean isAsc,
-            @RequestParam("role") String role
+            @RequestParam("size") int size
     ) {
-        return matchBoardService.getAllMatchBoard(page,size,isAsc,role);
+        return matchBoardService.getAllMatchBoard(page,size);
     }
 
 
@@ -44,13 +42,13 @@ public class MatchBoardController {
     }
 
     // Match 신청글 수정
-    @PostMapping("/api/board/{board_id}/matchboard/{matchboard_id}")
+    @PutMapping("/api/board/{board_id}/matchboard/{matchboard_id}")
     public MatchBoardResponseDto updateMatchBoard(@PathVariable Long board_id, @PathVariable Long matchboard_id, @RequestBody MatchBoardRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return matchBoardService.updateMatchBoard(board_id,matchboard_id,requestDto,userDetails.getUser());
     }
 
     // Match 신청글 삭제
-    @DeleteMapping("/api/board/{board_id}/mathchboard/{matchBoard_id}")
+    @DeleteMapping("/api/board/{board_id}/matchboard/{matchBoard_id}")
     public ResponseEntity deleteMatchBoard(@PathVariable Long board_id, @PathVariable Long matchBoard_id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return matchBoardService.deleteMatchBoard(board_id,matchBoard_id,userDetails.getUser());
     }

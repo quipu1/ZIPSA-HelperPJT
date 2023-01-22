@@ -10,4 +10,6 @@ public class MatchException extends RuntimeException{
 
     public static class MatchNotFoundException extends MatchException {}
 
+    public static class AlreadyMatchBoardFoundExcption extends MatchException {}
+
 }

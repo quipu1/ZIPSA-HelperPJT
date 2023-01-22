@@ -23,7 +23,7 @@ public interface MatchBoardService {
     ResponseEntity deleteMatchBoard(Long boardId, Long matchBoardId,User user);
 
     // MatchBoard 전체 조회 (페이징 처리)
-    Page<MatchBoard> getAllMatchBoard(int page, int size, boolean isAsc, String role);
+    Page<MatchBoardResponseDto> getAllMatchBoard(int page, int size);
 
     // MatchBoard 수락 기능
     ResponseEntity upStatus(Long boardId, Long matchboardId);

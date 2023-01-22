@@ -1,6 +1,7 @@
 package com.sparta.zipsa.advice;
 
 import com.sparta.zipsa.exception.*;
+import com.sparta.zipsa.exception.MatchException;
 import com.sparta.zipsa.exception.UserException.*;
 import com.sparta.zipsa.exception.TokenException.*;
 import com.sparta.zipsa.exception.BoardException.*;
@@ -65,6 +66,8 @@ public class ExceptionAdvice {
             return StatusResponse.toResponseEntity(StatusCode.ALREADY_REJECTED_MATCH);
         } else if (e instanceof AlreadyApproveMatchException) {
             return StatusResponse.toResponseEntity(StatusCode.ALREADY_APPROVED_MATCH);
+        } else if (e instanceof AlreadyMatchBoardFoundExcption) {
+            return StatusResponse.toResponseEntity(StatusCode.ALREADY_MATCHBOARD_FOUND);
         }
 
         return StatusResponse.toResponseEntity(StatusCode.MATCH);

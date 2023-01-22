@@ -5,7 +5,9 @@ import com.sparta.zipsa.dto.MatchBoardResponseDto;
 import com.sparta.zipsa.entity.Board;
 import com.sparta.zipsa.entity.MatchBoard;
 import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.entity.UserRoleEnum;
 import com.sparta.zipsa.exception.BoardException;
+import com.sparta.zipsa.exception.HelperException;
 import com.sparta.zipsa.exception.MatchException;
 import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.BoardRepository;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.sparta.zipsa.entity.UserRoleEnum.ADMIN;
@@ -36,6 +39,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
+
    // MatchBoard 생성
     @Override
     @Transactional
@@ -43,38 +47,33 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
         );
-
         // 유저 화인
-         User user = userRepository.findByUsername(userDetails.getUsername()).get();
+        User user = userRepository.findByUsername(userDetails.getUsername()).get();
 
+        // 헬퍼인지를 확인, 이미 작성했으면 못쓰게 한다
+        if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
+            throw new UserException.AuthorityException();
+        } else if (matchBoardRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new MatchException.AlreadyMatchBoardFoundExcption();
+        } else {
+            MatchBoard matchBoard = new MatchBoard(user,requestDto);
+            matchBoardRepository.save(matchBoard);
+            return new MatchBoardResponseDto(matchBoard,board);
+        }
 
-        MatchBoard matchBoard = new MatchBoard(user,requestDto,board);
-        matchBoardRepository.save(matchBoard);
-        return new MatchBoardResponseDto(matchBoard,board);
     }
     // MatchBoard 조회 (페이징 처리)
     @Override
     @Transactional
-    public Page<MatchBoard> getAllMatchBoard(int page, int size, boolean isAsc, String role) {
+    public Page<MatchBoardResponseDto> getAllMatchBoard(int page, int size) {
         // 페이징 처리
-        // 삼항연산자로 true ASC / false DESC 정렬 설정
-        // sortBy로 정렬 기준이 되는 property 설정 - id
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page,size,sort);
 
-        Page<MatchBoard> matchBoards;
+        Page<MatchBoard> matchBoards = matchBoardRepository.findAll(pageable);
+        Page<MatchBoardResponseDto>  matchBoardListDto = matchBoards.map(MatchBoardResponseDto::toMatchBoardResponseDto);
+        return matchBoardListDto;
 
-        if (role.equals("customer")) {
-            matchBoards = matchBoardRepository.findAll(pageable);
-        } else if (role.equals("helper")) {
-            matchBoards = matchBoardRepository.findAll(pageable);
-        } else if (role.equals("admin")) {
-            matchBoards = matchBoardRepository.findAll(pageable);
-        } else {
-            throw new BoardException.BoardNotFoundException();
-        }
-        return matchBoards;
     }
     // MatchBoard 선택 조회
     @Override
@@ -140,9 +139,10 @@ public class MatchBoardServiceImpl implements MatchBoardService {
                 MatchException.MatchNotFoundException::new
         );
 
-        // status가 모집중이면 수락된 게시물로 변경 및 help_cnt 1 증가
+        // status가 모집중이면 수락된 게시물로 변경 및 helpCnt 증가
         if (matchBoard.status.equals("신청중")) {
             matchBoard.upStatus();
+            board.changeStatus();
 
             User user = userRepository.findByUsername(matchBoard.getUsername()).orElseThrow(UserException.UserNotFoundException::new);
             user.addHelpCnt();
