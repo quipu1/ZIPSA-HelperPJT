@@ -139,7 +139,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
                 MatchException.MatchNotFoundException::new
         );
         User user = userRepository.findByUsername(matchBoard.getUsername()).orElseThrow(UserException.UserNotFoundException::new);
-        user.addHelpCnt();
+
 
         if(user.getId() != board.getUser().getId())
         {
@@ -150,7 +150,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         if (matchBoard.status.equals("신청중")) {
             matchBoard.upStatus();
             board.changeStatus();
-
+            user.addHelpCnt();
             List<MatchBoard> matchBoards = matchBoardRepository.findByBoardAndStatus(board, "신청중");
             for (MatchBoard m : matchBoards) {
                 m.downStatus();
@@ -177,13 +177,12 @@ public class MatchBoardServiceImpl implements MatchBoardService {
                 MatchException.MatchNotFoundException::new
         );
         User user = userRepository.findByUsername(matchBoard.getUsername()).orElseThrow(UserException.UserNotFoundException::new);
-        user.addHelpCnt();
 
         if(user.getId() != board.getUser().getId())
         {
             throw new IllegalArgumentException("게시글 작성 사용자가 아닙니다.");
         }
-        
+
         // status가 모집중이면 거절된 게시물로 변경
         if (matchBoard.status.equals("신청중")) {
             matchBoard.downStatus();
