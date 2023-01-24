@@ -42,6 +42,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Board> boards = new ArrayList<>();
 
+    @Column(nullable = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<MatchBoard> matchBoards = new ArrayList<>();
+
 
     public User(String username, String password, String address, String userImage, UserRoleEnum role) {
         this.username = username;
