@@ -39,6 +39,10 @@ public class MatchBoard extends TimeStamp{
     @JoinColumn(name = "board_Id", nullable = false)
     private Board board;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
 
     public MatchBoard(User user, Board board, MatchBoardRequestDto requestDto) {
         this.content = requestDto.getContent();
