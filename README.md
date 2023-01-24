@@ -14,7 +14,7 @@
 
 <p align="center"><span> Spring Security를 적용한 심부름 센터 백엔드 서버 만들기</span></p>
 
-<div align="center"><a href="https://www.notion.so/B-6-5bb98d3381be413bb4ccea516835ca27">팀 노션</a><br>
+<div align="center"><a href="https://www.notion.so/8fa710b180e24ba4bc22e80dd86f88e7">팀 노션</a><br>
 <a href="https://youtu.be/lYL0esCLXWQ">시연영상</a></div>
 
 <br>
