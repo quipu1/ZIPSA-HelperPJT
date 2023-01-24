@@ -33,7 +33,7 @@ public class BoardController {
     //모든 게시글 조회
     @GetMapping("/boards")
     @ResponseStatus(HttpStatus.OK)
-    public Page<BoardResponseDto> getBoardAll(
+    public List<BoardResponseDto> getBoardAll(
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
@@ -43,7 +43,7 @@ public class BoardController {
     //작성자의 내가 쓴 글 모두 조회
     @GetMapping("/myboard/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public Page<BoardResponseDto> getMyBoardAll(
+    public List<BoardResponseDto> getMyBoardAll(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @PathVariable Long userId,

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 @Builder
@@ -27,7 +27,7 @@ public class BoardResponseDto {
         private LocalDateTime modifiedAt;
         private Long price;
         private String status;
-        private List<MatchBoard> matchBoards;
+        private List<MatchBoardResponseDto> matchBoards = new ArrayList<>();
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();
@@ -39,22 +39,10 @@ public class BoardResponseDto {
         this.modifiedAt = board.getModifiedAt();
         this.price = board.getPrice();
         this.status = board.getStatus();
-        this.matchBoards = board.getMatchBoard();
-    }
-
-    public static BoardResponseDto toBoardResponseDto(final Board board) {
-        return BoardResponseDto.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .username(board.getUsername())
-                .address(board.getAddress())
-                .createdAt(board.getCreatedAt())
-                .modifiedAt(board.getModifiedAt())
-                .price(board.getPrice())
-                .status(board.getStatus())
-                .matchBoards(board.getMatchBoard())
-                .build();
+        this.matchBoards = board.getMatchBoard()
+                .stream()
+                .map(MatchBoardResponseDto::new)
+                .collect(Collectors.toList());
     }
 
 }
