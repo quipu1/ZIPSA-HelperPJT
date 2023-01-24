@@ -42,7 +42,7 @@ public class MatchBoard extends TimeStamp{
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
 
@@ -52,6 +52,7 @@ public class MatchBoard extends TimeStamp{
         this.helpCnt = user.getHelpCnt();
         this.userImg = user.getUserImage();
         this.board = board;
+        this.user = user;
     }
 
     public MatchBoard( String content, String username, Board board, String userImg) {
