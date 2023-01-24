@@ -30,6 +30,18 @@ public class MatchBoardResponseDto {
     // 추후 수정 예정
     private String userImg;
 
+    public MatchBoardResponseDto(MatchBoard matchBoard) {
+        this.id = matchBoard.getId();
+        this.helpCnt = matchBoard.getHelpCnt();
+        this.content = matchBoard.getContent();
+        this.username = matchBoard.getUsername();
+        this.createdAt = matchBoard.getCreatedAt();
+        this.modifiedAt = matchBoard.getModifiedAt();
+        this.status = matchBoard.getStatus();
+        this.boardId = matchBoard.getBoard().getId();
+        this.userImg = matchBoard.getUserImg();
+    }
+
 
     public MatchBoardResponseDto(MatchBoard matchBoard, Board board) {
         this.id = matchBoard.getId();

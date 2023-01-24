@@ -42,12 +42,15 @@ public class BoardServiceImpl implements BoardService {
     //모든 게시글 조회 - 페이징
     @Override
     @Transactional
-    public Page<BoardResponseDto> getBoardAll(int page, int size) {
+    public List<BoardResponseDto> getBoardAll(int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Board> boards = boardRepository.findAll(pageable);
-        Page<BoardResponseDto> boardListDto = boards.map(BoardResponseDto::toBoardResponseDto);
+        List<BoardResponseDto> boardListDto = boards.getContent()
+                .stream()
+                .map(BoardResponseDto::new)
+                .collect(Collectors.toList());
 
         return boardListDto;
     }
@@ -56,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
     //작성자의 내가 쓴 글 모두 조회 - 페이징
     @Override
     @Transactional
-    public Page<BoardResponseDto> getMyBoardAll(int page, int size, Long userId, User user) {
+    public List<BoardResponseDto> getMyBoardAll(int page, int size, Long userId, User user) {
 
         if (userId != user.getId()) {
             throw new UserException.AuthorityException();
@@ -66,7 +69,10 @@ public class BoardServiceImpl implements BoardService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Board> myBoardList = boardRepository.findAllByUsername(pageable, user.getUsername());
-        Page<BoardResponseDto> myBoardListDto = myBoardList.map(BoardResponseDto::toBoardResponseDto);
+        List<BoardResponseDto> myBoardListDto = myBoardList.getContent()
+                .stream()
+                .map(BoardResponseDto::new)
+                .collect(Collectors.toList());
 
         return  myBoardListDto;
     }

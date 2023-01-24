@@ -35,7 +35,7 @@ public class MatchBoard extends TimeStamp{
     @Column(nullable = false)
     public String userImg;
 
-    @JsonBackReference
+    //@JsonBackReference
     // 한개의 게시글에 여러개의 신청을 할 수 있다..?
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_Id", nullable = false)
