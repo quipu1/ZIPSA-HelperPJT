@@ -55,14 +55,14 @@ public class MatchBoardController {
 
     // 심부름 신청글 수럭
     @PostMapping("/api/board/{board_id}/matchboard/{matchboard_id}/up")
-    public ResponseEntity upStatus(@PathVariable Long board_id, @PathVariable Long matchboard_id) {
-        return matchBoardService.upStatus(board_id,matchboard_id);
+    public ResponseEntity upStatus(@PathVariable Long board_id, @PathVariable Long matchboard_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return matchBoardService.upStatus(board_id,matchboard_id, userDetails.getUserId());
     }
 
     // 심부름 신청글 거절
     @PostMapping("/api/board/{board_id}/matchboard/{matchboard_id}/down")
-    public ResponseEntity downStatus(@PathVariable Long board_id, @PathVariable Long matchboard_id) {
-        return matchBoardService.downStatus(board_id,matchboard_id);
+    public ResponseEntity downStatus(@PathVariable Long board_id, @PathVariable Long matchboard_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return matchBoardService.downStatus(board_id,matchboard_id, userDetails.getUserId());
     }
 
 }

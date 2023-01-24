@@ -131,7 +131,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     // 수락 기능
     @Override
     @Transactional
-    public ResponseEntity upStatus(Long boardId, Long matchboardId) {
+    public ResponseEntity upStatus(Long boardId, Long matchboardId, Long userId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
         );
@@ -141,9 +141,9 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         User user = userRepository.findByUsername(matchBoard.getUsername()).orElseThrow(UserException.UserNotFoundException::new);
 
 
-        if(user.getId() != board.getUser().getId())
+        if(userId != board.getUser().getId())
         {
-            throw new IllegalArgumentException("게시글 작성 사용자가 아닙니다.");
+            throw new UserException.AuthorityException();
         }
 
         // status가 모집중이면 수락된 게시물로 변경 및 helpCnt 증가
@@ -169,7 +169,7 @@ public class MatchBoardServiceImpl implements MatchBoardService {
     // 거절 기능
     @Override
     @Transactional
-    public ResponseEntity downStatus(Long boardId, Long matchboardId) {
+    public ResponseEntity downStatus(Long boardId, Long matchboardId, Long userId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 BoardException.BoardNotFoundException::new
         );
@@ -178,9 +178,9 @@ public class MatchBoardServiceImpl implements MatchBoardService {
         );
         User user = userRepository.findByUsername(matchBoard.getUsername()).orElseThrow(UserException.UserNotFoundException::new);
 
-        if(user.getId() != board.getUser().getId())
+        if(userId != board.getUser().getId())
         {
-            throw new IllegalArgumentException("게시글 작성 사용자가 아닙니다.");
+            throw new UserException.AuthorityException();
         }
 
         // status가 모집중이면 거절된 게시물로 변경
