@@ -1,5 +1,6 @@
 package com.sparta.zipsa.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.zipsa.dto.BoardRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,6 +40,7 @@ public class Board extends TimeStamp {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
+    @JsonManagedReference
     @Column(nullable = false)
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<MatchBoard> matchBoard = new ArrayList<>();
