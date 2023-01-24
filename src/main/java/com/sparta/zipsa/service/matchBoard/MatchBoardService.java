@@ -26,8 +26,8 @@ public interface MatchBoardService {
     Page<MatchBoardResponseDto> getAllMatchBoard(int page, int size);
 
     // MatchBoard 수락 기능
-    ResponseEntity upStatus(Long boardId, Long matchboardId);
+    ResponseEntity upStatus(Long boardId, Long matchboardId, Long userId);
 
     // MatchBoard 거절 기능
-    ResponseEntity downStatus(Long boardId, Long matchboardId);
+    ResponseEntity downStatus(Long boardId, Long matchboardId, Long userId);
 }
