@@ -1,14 +1,14 @@
 package com.sparta.zipsa.service.user;
 
-import com.sparta.zipsa.dto.*;
-import com.sparta.zipsa.entity.Board;
+import com.sparta.zipsa.dto.PasswordRequestDto;
+import com.sparta.zipsa.dto.ProfileRequestDto;
+import com.sparta.zipsa.dto.ProfileResponseDto;
+import com.sparta.zipsa.dto.UserResponseDto;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
-import com.sparta.zipsa.exception.BoardException;
 import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.UserRepository;
 import com.sparta.zipsa.service.file.FileService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -43,6 +42,13 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(userId).orElseThrow(UserException.UserNotFoundException::new);
         return new ProfileResponseDto(user);
+    }
+
+    //유저 조회 기능
+    @Override
+    @Transactional(readOnly = true)
+    public User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(UserException.UserNotFoundException::new);
     }
 
     //프로필 수정 기능
@@ -65,11 +71,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return new ResponseEntity("프로필 수정이 완료됐습니다", HttpStatus.OK);
     }
+
     //비밀번호 변경
     @Override
     @Transactional
-    public ResponseEntity modifyPassword(Long userId,User user,PasswordRequestDto passwordRequestDto) {
-            if(userId == user.getId()){
+    public ResponseEntity modifyPassword(Long userId, User user, PasswordRequestDto passwordRequestDto) {
+        if (userId == user.getId()) {
             user.modifyPassword(passwordEncoder.encode(passwordRequestDto.getPassword()));
             userRepository.save(user);
             return new ResponseEntity("비밀번호가 수정되었습니다.", HttpStatus.OK);

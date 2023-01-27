@@ -7,6 +7,7 @@ import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
 import com.sparta.zipsa.exception.BoardException;
 import com.sparta.zipsa.exception.UserException;
+import com.sparta.zipsa.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.sparta.zipsa.repository.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,12 +27,11 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
 
-
     //게시글 생성
     @Override
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequest, User user) {
-        Board board = new Board(boardRequest,user);
+        Board board = new Board(boardRequest, user);
         boardRepository.save(board);
         BoardResponseDto boardResponse = new BoardResponseDto(board);
         return boardResponse;
@@ -74,18 +73,15 @@ public class BoardServiceImpl implements BoardService {
                 .map(BoardResponseDto::new)
                 .collect(Collectors.toList());
 
-        return  myBoardListDto;
+        return myBoardListDto;
     }
 
 
     //선택한 게시글 조회
     @Override
     @Transactional
-    public BoardResponseDto getBoard(Long boardId, String username) {
-        Board board = boardRepository.findById(boardId).orElseThrow(BoardException.BoardNotFoundException::new);
-        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
-
-        return boardResponseDto;
+    public Board getBoard(Long boardId) {
+        return boardRepository.findById(boardId).orElseThrow(BoardException.BoardNotFoundException::new);
     }
 
 
@@ -104,9 +100,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public ResponseEntity deleteBoard(Long boardId, User user)
-    {
-        Board board =boardRepository.findById(boardId).orElseThrow(BoardException.BoardNotFoundException::new);
+    public ResponseEntity deleteBoard(Long boardId, User user) {
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardException.BoardNotFoundException::new);
         checkUser(user, board);
         boardRepository.deleteById(boardId);
 
@@ -123,7 +118,7 @@ public class BoardServiceImpl implements BoardService {
 
     //작성자와 현재 유저가 같은 지, ADMIN인지 확인
     private void checkUser(User user, Board board) {
-        if (user.getRole() != UserRoleEnum.ADMIN  && !user.getUsername().equals(board.getUsername())) {
+        if (user.getRole() != UserRoleEnum.ADMIN && !user.getUsername().equals(board.getUsername())) {
             throw new UserException.AuthorityException();
         }
     }

@@ -8,11 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MatchBoardRepository extends JpaRepository<MatchBoard, Long> {
 
-    Optional<MatchBoard> findByUsernameAndBoard(String username, Board board);
+    Boolean existsByUsernameAndBoard(String username, Board board);
+
     @NotNull Page<MatchBoard> findAll(@NotNull Pageable pageable);
+
     List<MatchBoard> findByBoardAndStatus(Board board, String status);
 }

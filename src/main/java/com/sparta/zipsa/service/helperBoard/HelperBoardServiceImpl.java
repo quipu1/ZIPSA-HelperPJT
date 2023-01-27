@@ -2,7 +2,7 @@ package com.sparta.zipsa.service.helperBoard;
 
 import com.sparta.zipsa.dto.HelperBoardRequestDto;
 import com.sparta.zipsa.dto.HelperBoardResponseDto;
-import com.sparta.zipsa.dto.UserResponseDto;
+import com.sparta.zipsa.dto.HelperBoardSearchCond;
 import com.sparta.zipsa.entity.HelperBoard;
 import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.entity.UserRoleEnum;
@@ -10,13 +10,8 @@ import com.sparta.zipsa.exception.BoardException;
 import com.sparta.zipsa.exception.HelperException;
 import com.sparta.zipsa.exception.UserException;
 import com.sparta.zipsa.repository.HelperBoardRepository;
-import com.sparta.zipsa.service.helperBoard.HelperBoardService;
-import com.sparta.zipsa.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,7 +30,7 @@ public class HelperBoardServiceImpl implements HelperBoardService {
     // 헬퍼 신청글 작성
     @Override
     @Transactional
-    public ResponseEntity createHelperBoard(HelperBoardRequestDto helperBoardRequestDto, User user) {
+    public ResponseEntity<String> createHelperBoard(HelperBoardRequestDto helperBoardRequestDto, User user) {
         HelperBoard helperBoard = new HelperBoard(helperBoardRequestDto, user);
         if (user.getRole().equals(UserRoleEnum.HELPER)) {   //이미 집사 권한을 가지고 있는 경우 예외 처리
             throw new HelperException.AlreadyHelperException();
@@ -44,12 +39,12 @@ public class HelperBoardServiceImpl implements HelperBoardService {
         } else {
             helperBoardRepository.save(helperBoard);
         }
-        return new ResponseEntity("집사 권한을 신청했습니다.", HttpStatus.OK);
+        return new ResponseEntity<>("집사 권한을 신청했습니다.", HttpStatus.OK);
     }
 
     //헬퍼 신청글 삭제
     @Override
-    public ResponseEntity deleteHelperBoard(Long helperBoardId, User user) {
+    public ResponseEntity<String> deleteHelperBoard(Long helperBoardId, User user) {
         HelperBoard helperBoard = helperBoardRepository.findById(helperBoardId).orElseThrow(BoardException.BoardNotFoundException::new);
         //권한 있는지 확인
         if (helperBoardRepository.findById(helperBoardId).isEmpty()) {
@@ -57,7 +52,7 @@ public class HelperBoardServiceImpl implements HelperBoardService {
         }
         if (isAuthorized(user, helperBoard)) {
             helperBoardRepository.delete(helperBoard);
-            return new ResponseEntity("집사 권한 신청글이 삭제 되었습니다.", HttpStatus.OK);
+            return new ResponseEntity<>("집사 권한 신청글이 삭제 되었습니다.", HttpStatus.OK);
         }
 
         throw new UserException.AuthorityException();
@@ -95,15 +90,10 @@ public class HelperBoardServiceImpl implements HelperBoardService {
 
     //관리자의 헬퍼 신청글 전체 조회
     @Override
-    public List<HelperBoardResponseDto> getHelperBoardList(User user, String search, int page, int size, boolean isAsc) {
+    public List<HelperBoardResponseDto> getHelperBoardList(User user, HelperBoardSearchCond searchCond) {
 
-        page = Math.max(page, 0);
-
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "id");
-        Pageable pageable = PageRequest.of(page, size, sort);
         List<HelperBoardResponseDto> helperBoardResponseDtoList = new ArrayList<>();
-        Page<HelperBoard> helperBoardPage = helperBoardRepository.findByAddressContaining(search, pageable);
+        Page<HelperBoard> helperBoardPage = helperBoardRepository.findByAddressContaining(searchCond.getSearch(), searchCond.toPageable());
 
         if (helperBoardPage.isEmpty()) {
             throw new BoardException.BoardNotFoundException();
