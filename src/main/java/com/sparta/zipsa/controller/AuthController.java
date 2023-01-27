@@ -8,7 +8,6 @@ import com.sparta.zipsa.dto.SignupRequestDto;
 import com.sparta.zipsa.jwt.JwtUtil;
 import com.sparta.zipsa.security.UserDetailsImpl;
 import com.sparta.zipsa.service.auth.AuthService;
-import com.sparta.zipsa.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

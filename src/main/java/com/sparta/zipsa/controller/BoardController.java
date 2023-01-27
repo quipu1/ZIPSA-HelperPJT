@@ -2,11 +2,9 @@ package com.sparta.zipsa.controller;
 
 import com.sparta.zipsa.dto.BoardRequestDto;
 import com.sparta.zipsa.dto.BoardResponseDto;
-import com.sparta.zipsa.entity.User;
 import com.sparta.zipsa.security.UserDetailsImpl;
 import com.sparta.zipsa.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,7 +53,7 @@ public class BoardController {
     @GetMapping("/board/{boardId}")
     @ResponseStatus(HttpStatus.OK)
     public BoardResponseDto getBoard(@PathVariable Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.getBoard(boardId, userDetails.getUsername());
+        return new BoardResponseDto(boardService.getBoard(boardId));
     }
 
     //선택한 게시글 수정
@@ -69,7 +67,6 @@ public class BoardController {
     public ResponseEntity deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.deleteBoard(boardId, userDetails.getUser());
     }
-
 
 
 }

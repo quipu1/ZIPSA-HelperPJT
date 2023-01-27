@@ -1,12 +1,13 @@
 package com.sparta.zipsa.controller;
 
-import com.sparta.zipsa.entity.User;
+import com.sparta.zipsa.dto.PasswordRequestDto;
+import com.sparta.zipsa.dto.ProfileRequestDto;
+import com.sparta.zipsa.dto.ProfileResponseDto;
+import com.sparta.zipsa.dto.UserResponseDto;
 import com.sparta.zipsa.security.UserDetailsImpl;
-import com.sparta.zipsa.dto.*;
 import com.sparta.zipsa.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class UserController {
         return userService.getProfile(userId);
     }
 
-   //프로필 수정
+    //프로필 수정
     @PutMapping("/{userId}")
     public ResponseEntity updateProfile(
             @PathVariable Long userId,
@@ -40,7 +41,7 @@ public class UserController {
 
     //비밀번호 변경
     @PutMapping("/password/{userId}")
-    public ResponseEntity modifyPassword(@PathVariable Long userId, @RequestBody @Valid PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity modifyPassword(@PathVariable Long userId, @RequestBody @Valid PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.modifyPassword(userId, userDetails.getUser(), passwordRequestDto);
     }
 
@@ -53,7 +54,7 @@ public class UserController {
             @RequestParam(value = "isAsc", defaultValue = "true") boolean isAsc
 
     ) {
-        return userService.getApplyCustomers(search,page-1, size, isAsc);
+        return userService.getApplyCustomers(search, page - 1, size, isAsc);
     }
 
     //헬퍼 전체 조회
@@ -64,7 +65,7 @@ public class UserController {
             @RequestParam(value = "size", defaultValue = "3") int size,
             @RequestParam(value = "isAsc", defaultValue = "true") boolean isAsc
     ) {
-        return userService.getHelpers(search,page-1, size, isAsc);
+        return userService.getHelpers(search, page - 1, size, isAsc);
     }
 
 
